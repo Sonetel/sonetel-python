@@ -1,0 +1,8 @@
+[build-system]
+requires = [
+    "setuptools>=42",
+    "wheel",
+    "requests",
+    "pyjwt[crypto]>=2.2.0"
+]
+build-backend = "setuptools.build_meta"
