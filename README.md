@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-  <a href="https://github.com/aashish-joshi/sonetel-python">
+  <a href="https://github.com/Sonetel/sonetel-python">
     <img src="https://dl.dropboxusercontent.com/s/hn4o0v378od1aoo/logo_white_background.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -19,7 +19,9 @@
 </div>
 
 ## Introduction
-This is a simple python wrapper to use Sonetel's communication APIs.
+The Sonetel API is a REST based web-service that enables you to manage your Sonetel account from your own platform or service. You can manage your account, your phone numbers and make callback calls etc.
+
+This is a simple python wrapper to use Sonetel's communication APIs. For more information about the API, please see the [documentation](https://docs.sonetel.com/).
 
 ## Getting Started
 
@@ -33,7 +35,7 @@ Run the following command to install from pip.
 `pip install sonetel`
 
 #### Git
-To get the latest features, clone a specific [tag](https://github.com/aashish-joshi/sonetel-python/tags) and [follow these instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to build the module locally.
+To get the latest features, clone a specific [tag](https://github.com/Sonetel/sonetel-python/issues/tags) and [follow these instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to build the module locally.
 
 ## Functions
 
@@ -140,4 +142,4 @@ print(s.get_accountid())
 
 For help with the Sonetel API, have a look at the <a href="https://docs.sonetel.com">API documentation</a>.
 
-If you have an issue with the module, please [report an issue](https://github.com/aashish-joshi/sonetel-python/issues) on GitHub.
+If you have an issue with the module, please [report an issue](https://github.com/Sonetel/sonetel-python/issues/issues) on GitHub.

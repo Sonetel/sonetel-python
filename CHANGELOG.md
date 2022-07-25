@@ -2,6 +2,13 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
+## [0.1.3] - 25-07-2022
+### Added
++ `get_refreshtoken()` - returns the refresh token if defined otherwise returns `False`.
+
+### Changes
++ The project moves to its new [home](https://github.com/Sonetel/sonetel-python). The documentation has been updated to reflect this change.
+
 ## [0.1.2] - 25-07-2022
 
 ### Changes

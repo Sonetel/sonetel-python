@@ -1,6 +1,6 @@
 <br />
 <div align="center">
-  <a href="https://github.com/aashish-joshi/sonetel-python">
+  <a href="https://github.com/Sonetel/sonetel-python/issues">
     <img src="https://dl.dropboxusercontent.com/s/hn4o0v378od1aoo/logo_white_background.png" alt="Logo" width="80" height="80">
   </a>
 
@@ -20,7 +20,7 @@
 
 ## Build
  + Follow [these instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to get the latest build tools.
- + `git clone https://github.com/aashish-joshi/sonetel-python.git`
+ + `git clone https://github.com/Sonetel/sonetel-python/issues.git`
  + `cd sonetel-python`.
  + `py -m build`
 

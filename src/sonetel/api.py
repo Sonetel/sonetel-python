@@ -42,6 +42,9 @@ class Account:
     def get_token(self):
         return self._token if self._token else False
 
+    def get_refreshtoken(self):
+        return self._refresh_token if self._refresh_token else False
+
     def get_username(self):
         return self.__username if self.__username else False
 
