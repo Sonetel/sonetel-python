@@ -124,7 +124,7 @@ class Account:
         # Check the response and handle accordingly
         if r.status_code == requests.codes.ok:
             response = r.json()
-            return response
+            return response['response']
         else:
             print(r.json())
             r.raise_for_status()

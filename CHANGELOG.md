@@ -8,6 +8,7 @@ All notable changes to the Sonetel Python Module are tracked in this file.
 
 ### Changes
 + The project moves to its new [home](https://github.com/Sonetel/sonetel-python). The documentation has been updated to reflect this change.
++ `account_info()` now only returns the actual response, other metadata isn't returned.
 
 ## [0.1.2] - 25-07-2022
 
