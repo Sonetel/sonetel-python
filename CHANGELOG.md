@@ -2,6 +2,15 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
+## [0.1.4] - 26-07-2022
+### Added
++ `get_voiceapps()` - get a detailed list of all the voice apps in a Sonetel account.
++ `get_decodedtoken()` - returns the decoded value of the JWT token.
+
+### Changes
++ Update `create_token()` to refresh the access token easily.
++ Minor code optimization
+
 ## [0.1.3] - 25-07-2022
 ### Added
 + `get_refreshtoken()` - returns the refresh token if defined otherwise returns `False`.
