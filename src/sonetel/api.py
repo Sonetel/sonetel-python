@@ -22,7 +22,7 @@ class Account:
         if not isinstance(username, str) or not isinstance(password, str):
             raise TypeError
 
-        self.__username = username
+        self._username = username
         self.__password = password
 
         # API URLs
@@ -39,20 +39,43 @@ class Account:
         self._accountid = self._decoded_token['acc_id']
         self._userid = self._decoded_token['user_id']
 
+    def _send_api_request(self, uri: str):
+
+        # Prepare the request Header
+        request_header = {
+            "Authorization": "Bearer " + self._token
+        }
+
+        # Send the request
+        r = requests.get(
+            url=uri,
+            headers=request_header
+        )
+
+        if r.status_code == requests.codes.ok:
+            response = r.json()
+            return response
+        else:
+            print(r.json())
+            r.raise_for_status()
+
     def get_token(self):
-        return self._token if self._token else False
+        return self._token if hasattr(self, "_token") else False
+
+    def get_decodedtoken(self):
+        return self._decoded_token if hasattr(self, "_decoded_token") else False
 
     def get_refreshtoken(self):
-        return self._refresh_token if self._refresh_token else False
+        return self._refresh_token if hasattr(self, "_refresh_token") else False
 
     def get_username(self):
-        return self.__username if self.__username else False
+        return self._username if hasattr(self, "_username") else False
 
     def get_userid(self):
-        return self._userid if self._userid else False
+        return self._userid if hasattr(self, "_userid") else False
 
     def get_accountid(self):
-        return self._accountid if self._accountid else False
+        return self._accountid if hasattr(self, "_accountid") else False
 
     def _decode_token(self):
         return jwt.decode(self._token, options={"verify_signature": False})
@@ -71,15 +94,22 @@ class Account:
         :return: Returns the access token.
         """
 
+        try:
+            refresh_token = self._refresh_token
+        except AttributeError:
+            pass
+
         if grant_type == 'refresh_token' and refresh_token is None:
             raise ValueError("A 'refresh_token' is needed.")
 
         # Prepare the request body.
-        body = f"grant_type={grant_type}&username={self.__username}&password={self.__password}&refresh={refresh}"
+        body = f"grant_type={grant_type}&refresh={refresh}"
 
         # Add the refresh token to the request body if passed to the function
         if refresh_token is not None and grant_type == 'refresh_token':
             body += f"&refresh_token={refresh_token}"
+        else:
+            body += f"&username={self._username}&password={self.__password}"
 
         auth = ('sonetel-api', 'sonetel-api')
 
@@ -96,7 +126,13 @@ class Account:
 
         # Check the response and handle accordingly.
         if r.status_code == requests.codes.ok:
-            return r.json()
+            response_json = r.json()
+
+            if refresh_token is not None and grant_type == 'refresh_token':
+                self._token = response_json["access_token"]
+                self._refresh_token = response_json["refresh_token"]
+
+            return response_json
         else:
             print(r.json())
             r.raise_for_status()
@@ -110,24 +146,9 @@ class Account:
         :return: A dict with the the Sonetel account details.
         """
 
-        # Prepare the request Header
-        header = {
-            "Authorization": "Bearer " + self._token,
-            "Content-Type": "application/json"
-        }
-
-        # Send the request
-        r = requests.get(
-            url=f"{self._base_url}/account/{self._accountid}",
-            headers=header)
-
-        # Check the response and handle accordingly
-        if r.status_code == requests.codes.ok:
-            response = r.json()
-            return response['response']
-        else:
-            print(r.json())
-            r.raise_for_status()
+        url = f"{self._base_url}/account/{self._accountid}"
+        api_response = self._send_api_request(url)
+        return api_response['response']
 
     def get_balance(self, currency: bool = False) -> str:
         """
@@ -138,26 +159,14 @@ class Account:
         :return: The current prepaid balance.
         """
 
-        # Prepare the request Header
-        header = {
-            "Authorization": "Bearer " + self._token,
-            "Content-Type": "application/json"
-        }
+        url = f"{self._base_url}/account/{self._accountid}"
+        api_response = self._send_api_request(url)
+        balance = api_response['response']['credit_balance']
 
-        # Send the request
-        r = requests.get(
-            url=f"{self._base_url}/account/{self._accountid}",
-            headers=header)
+        if currency:
+            return f"{balance}  {api_response['response']['currency']}"
 
-        # Check the response and handle accordingly
-        if r.status_code == requests.codes.ok:
-            response = r.json()
-            if currency:
-                return response['response']['credit_balance'] + ' ' + response['response']['currency']
-            return response['response']['credit_balance']
-        else:
-            print(r.json())
-            r.raise_for_status()
+        return balance
 
     # Fetch details of all users in account
     def account_users(self) -> list:
@@ -168,24 +177,22 @@ class Account:
 
         :return: Returns a list containing the user information
         """
+        url = f'{self._base_url}/account/{self._accountid}/user/'
+        api_response = self._send_api_request(url)
+        return api_response['response']
 
-        # Prepare the request Header
-        request_header = {
-            "Authorization": "Bearer " + self._token
-        }
+    # Fetch a list of all the voice apps in the account
+    def get_voiceapps(self) -> list:
+        """
+        Get a list of all the voice apps in the Sonetel account along with their settings
+        **Docs**: https://docs.sonetel.com/docs/sonetel-documentation/b3A6MTY4MzExODg-get-all-voice-apps
 
-        # Send the request
-        r = requests.get(
-            url=f'{self._base_url}/account/{self._accountid}/user/',
-            headers=request_header
-        )
-        # Check the response and handle accordingly
-        if r.status_code == requests.codes.ok:
-            response = r.json()
-            return response['response']
-        else:
-            print(r.json())
-            r.raise_for_status()
+        :return: Returns a list containing the voice app information
+        """
+
+        url = f'{self._base_url}/account/{self._accountid}/voiceapp/'
+        api_response = self._send_api_request(url)
+        return api_response['response']
 
     def callback(self, num1: str, num2: str, cli1: str = 'automatic', cli2: str = 'automatic'):
         """
@@ -299,33 +306,20 @@ class Account:
         :return: Returns a list containing the information about the numbers assigned to you.
         """
 
-        # Prepare the request Header
-        request_header = {
-            "Authorization": "Bearer " + self._token,
-            "Content-Type": "application/json"
-        }
+        url = f'{self._base_url}/account/{self._accountid}/phonenumbersubscription/'
+        api_response = self._send_api_request(url)
+        response = api_response['response']
 
-        # Send the request
-        r = requests.get(
-            url=f'{self._base_url}/account/{self._accountid}/phonenumbersubscription/',
-            headers=request_header
-        )
+        if 'e164only' in kwargs:
+            # Return only the E164 numbers if e164only = True
+            if kwargs['e164only']:
+                nums = []
+                for entry in response:
+                    nums.append(entry['phnum'])
+                return nums
 
         # Check the response and handle accordingly
-        if r.status_code == requests.codes.ok:
-            response = r.json()
-            if response['response'] == 'No entries found':
-                return ['No entries found']
-            else:
-                if 'e164only' in kwargs:
-                    # Return only the E164 numbers if e164only = True
-                    if kwargs['e164only']:
-                        nums = []
-                        for entry in response['response']:
-                            nums.append(entry['phnum'])
-                        return nums
-                    else:
-                        return response['response']
-                return response['response']
-        else:
-            r.raise_for_status()
+        if response == 'No entries found':
+            return ['No entries found']
+
+        return response
