@@ -35,20 +35,22 @@ Run the following command to install from pip.
 `pip install sonetel`
 
 #### Git
-To get the latest features, clone a specific [tag](https://github.com/Sonetel/sonetel-python/issues/tags) and [follow these instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to build the module locally.
+To get the latest features, clone a specific [tag](https://github.com/Sonetel/sonetel-python/tags) and [follow these instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to build the module locally.
 
 ## Functions
 
 The following functions are support at the moment. More will be added in the future.
 
 - `get_balance()` - Get the prepaid balance of the account (e.g. '10'). Pass the argument `currency=True` to get the balance with the currency appended (e.g. '10 USD')
+- `get_token()` - Get the access token being used.
 - `get_accountid()` - Returns your Sonetel account ID.
+- `get_username()` - Returns the email address of the user that was used to create the token.
+- `get_voiceapps()` - get a list of all the voice apps in the account.
+- `get_refreshtoken()` - get the refresh token used to regenerate the access token when it expires.
 - `account_info()` - Fetch information about your account such as company name, balance, country, timezone, daily limit and so on.
 - `account_users()` - Details of all the users in your account.
 - `callback()` - Use our Callback API to make a callback call.
 - `create_token()` - Create a new access token. A new access token is automatically created when you call the Account resource the first time.
-- `get_token()` - Get the access token being used.
-- `get_username()` - Returns the email address of the user that was used to create the token.
 - `subscription_buynum()` - Purchase a phone number. Requires a phone number to be passed. Use the `/availablephonenumber` API endpoint to see a list of phone numbers available for purchase from a country and area.
 - `subscription_listnums()` - See the details of all the phone numbers purchased by you. Pass the parameter `e164only=True` to only get a list of E.164 numbers without any metadata.
 
@@ -116,6 +118,46 @@ result = s.callback(
     num2="NUMBER_TO_CALL",
 )
 print(result)
+```
+
+### 5. Refresh access token
+
+When your access token has expired, you can use the `create_token()` method to get a new `access_token` & `refresh_token`.
+
+This automatically updates the Account object to use the newly generated access and refresh tokens.
+
+```python
+import os
+from sonetel import api
+
+user = os.environ.get('sonetelUserName')
+pswd = os.environ.get('sonetelPassword')
+
+s = api.Account(username=user,password=pswd)
+
+print(s.get_token())
+
+# Generate the refresh token and update the Account object
+response = s.create_token(refresh="yes", grant_type="refresh_token")
+
+print(response)
+```
+
+### 6. Get decoded JWT token
+
+Get the decoded JWT token.
+
+```python
+import os
+from sonetel import api
+
+user = os.environ.get('sonetelUserName')
+pswd = os.environ.get('sonetelPassword')
+
+s = api.Account(username=user,password=pswd)
+
+print(s.get_decodedtoken())
+
 ```
 
 ## Storing your credentials
