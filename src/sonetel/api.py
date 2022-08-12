@@ -78,7 +78,11 @@ class Account:
         return self._accountid if hasattr(self, "_accountid") else False
 
     def _decode_token(self):
-        return jwt.decode(self._token, options={"verify_signature": False})
+        return jwt.decode(
+            self._token,
+            audience='api.sonetel.com',
+            options={"verify_signature": False}
+            )
 
     def create_token(self, refresh: str = "yes", grant_type: str = "password", refresh_token: str = None) -> dict:
         """
