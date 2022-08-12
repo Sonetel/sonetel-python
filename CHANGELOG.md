@@ -2,6 +2,10 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
+## [0.1.5] - 11-08-2022
+### Fixed
++ Issue #1: add audience parameter to decode token function.
+
 ## [0.1.4] - 26-07-2022
 ### Added
 + `get_voiceapps()` - get a detailed list of all the voice apps in a Sonetel account.
