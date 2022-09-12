@@ -1,13 +1,11 @@
 # Import Packages.
-try:
-    import requests
-    import re
-    from json import dumps
-    import jwt
-except ImportError as e:
-    raise ImportError(e)
+import requests
+from json import dumps
+import jwt
+from . import constants as const
+from . import utilities
 
-class Account:
+class API:
     """
     Use Sonetel's Python module to manage your account.
 
@@ -16,8 +14,8 @@ class Account:
     """
 
     def __init__(self, username: str, password: str,
-                 auth_url='https://api.sonetel.com/SonetelAuth/beta/oauth/token',
-                 base_url='https://public-api.sonetel.com'):
+                 auth_url=const.API_URI_AUTH,
+                 base_url=const.API_URI_BASE):
 
         if not isinstance(username, str) or not isinstance(password, str):
             raise TypeError
@@ -38,6 +36,15 @@ class Account:
         # Account and User Information
         self._accountid = self._decoded_token['acc_id']
         self._userid = self._decoded_token['user_id']
+
+    def __str__(self):
+        return str({
+            "username": self._username,
+            "accountid": self._accountid,
+            "prepaid_balance": self.get_balance(currency=True),
+            "phone_numbers": self.subscription_listnums(e164only=True),
+            "details": self.account_info()
+        })
 
     def _send_api_request(self, uri: str):
 
@@ -80,7 +87,7 @@ class Account:
     def _decode_token(self):
         return jwt.decode(
             self._token,
-            audience='api.sonetel.com',
+            audience=const.API_AUDIENCE,
             options={"verify_signature": False}
             )
 
@@ -115,10 +122,10 @@ class Account:
         else:
             body += f"&username={self._username}&password={self.__password}"
 
-        auth = ('sonetel-api', 'sonetel-api')
+        auth = (const.CONST_JWT_USER, const.CONST_JWT_PASS)
 
         # Prepare the request headers
-        headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+        headers = {'Content-Type': const.CONTENT_TYPE_AUTH}
 
         # Send the request
         r = requests.post(
@@ -141,7 +148,7 @@ class Account:
             print(r.json())
             r.raise_for_status()
 
-    def account_info(self):
+    def account_info(self) -> dict:
 
         """
         Get information about Sonetel account such as the account ID, prepaid balance, currency, country, etc.
@@ -150,8 +157,8 @@ class Account:
         :return: A dict with the the Sonetel account details.
         """
 
-        url = f"{self._base_url}/account/{self._accountid}"
-        api_response = self._send_api_request(url)
+        url = f"{self._base_url}{const.API_ENDPOINT_ACCOUNT}{self._accountid}"
+        api_response = utilities.send_api_request(token=self._token, uri=url)
         return api_response['response']
 
     def get_balance(self, currency: bool = False) -> str:
@@ -163,8 +170,8 @@ class Account:
         :return: The current prepaid balance.
         """
 
-        url = f"{self._base_url}/account/{self._accountid}"
-        api_response = self._send_api_request(url)
+        url = f"{self._base_url}{const.API_ENDPOINT_ACCOUNT}{self._accountid}"
+        api_response = utilities.send_api_request(token=self._token, uri=url)
         balance = api_response['response']['credit_balance']
 
         if currency:
@@ -181,8 +188,8 @@ class Account:
 
         :return: Returns a list containing the user information
         """
-        url = f'{self._base_url}/account/{self._accountid}/user/'
-        api_response = self._send_api_request(url)
+        url = f'{self._base_url}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_USER}'
+        api_response = self.utilities.send_api_request(token=self._token, uri=url)
         return api_response['response']
 
     # Fetch a list of all the voice apps in the account
@@ -194,8 +201,8 @@ class Account:
         :return: Returns a list containing the voice app information
         """
 
-        url = f'{self._base_url}/account/{self._accountid}/voiceapp/'
-        api_response = self._send_api_request(url)
+        url = f'{self._base_url}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_VOICEAPP}'
+        api_response = self.utilities.send_api_request(token=self._token, uri=url)
         return api_response['response']
 
     def callback(self, num1: str, num2: str, cli1: str = 'automatic', cli2: str = 'automatic'):
@@ -233,7 +240,7 @@ class Account:
             # Initiate the callback
             request_header = {
                 'Authorization': 'Bearer ' + self._token,
-                'Content-Type': 'application/json;charset=UTF-8'
+                'Content-Type': const.CONTENT_TYPE_GENERAL
             }
 
             body = {
@@ -246,7 +253,7 @@ class Account:
 
             # Send the request
             r = requests.post(
-                url=f'{self._base_url}/make-calls/call/call-back',
+                url=f'{self._base_url}{const.API_ENDPOINT_CALLBACK}',
                 data=dumps(body),
                 headers=request_header
             )
@@ -281,12 +288,12 @@ class Account:
         # Prepare the request Header
         request_header = {
             "Authorization": "Bearer " + self._token,
-            "Content-Type": "application/json"
+            "Content-Type": const.CONTENT_TYPE_GENERAL
         }
 
         # Send the request
         r = requests.post(
-            url=f'{self._base_url}/account/{self._accountid}/phonenumbersubscription/',
+            url=f'{self._base_url}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_NUMBERSUBSCRIPTION}',
             data=dumps(body),
             headers=request_header
         )
@@ -310,8 +317,8 @@ class Account:
         :return: Returns a list containing the information about the numbers assigned to you.
         """
 
-        url = f'{self._base_url}/account/{self._accountid}/phonenumbersubscription/'
-        api_response = self._send_api_request(url)
+        url = f'{self._base_url}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_NUMBERSUBSCRIPTION}'
+        api_response = utilities.send_api_request(token=self._token, uri=url)
         response = api_response['response']
 
         if 'e164only' in kwargs:
