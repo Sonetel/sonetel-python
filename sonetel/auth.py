@@ -66,12 +66,20 @@ class Auth:
         headers = {'Content-Type': const.CONTENT_TYPE_AUTH}
 
         # Send the request
-        r = requests.post(
-            url=const.API_URI_AUTH,
-            data=body,
-            headers=headers,
-            auth=auth
-        )
+        try:
+            r = requests.post(
+                url=const.API_URI_AUTH,
+                data=body,
+                headers=headers,
+                auth=auth
+            )
+            r.raise_for_status()
+        except requests.exceptions.ConnectionError as err:
+            raise e.AuthException({'status': 'ConnectionError', 'message': err})
+        except requests.exceptions.Timeout:
+            raise e.AuthException({'status': 'Timeout', 'message': 'Operation timed out. Please try again.'})
+        except requests.exceptions.HTTPError as err:
+            raise e.AuthException({'status': 'Timeout', 'message': err})
 
         # Check the response and handle accordingly.
         if r.status_code == requests.codes.ok:
@@ -88,7 +96,7 @@ class Auth:
 
             return response_json
         else:
-            return r.json()
+            raise e.AuthException(r.json())
 
     def get_access_token(self):
         """
