@@ -59,12 +59,20 @@ def send_api_request(token: str,
     }
 
     # Send the request
-    r = requests.request(
-        method=method,
-        url=uri,
-        headers=request_header,
-        data=body
-    )
+    try:
+        r = requests.request(
+            method=method,
+            url=uri,
+            headers=request_header,
+            data=body
+        )
+        r.raise_for_status()
+    except requests.exceptions.HTTPError as err:
+        print(r.text)
+    except requests.exceptions.ConnectionError as err:
+        raise e.AuthException({'status': 'ConnectionError', 'message': err})
+    except requests.exceptions.RequestException as err:
+        raise e.AuthException({'status': 'RequestException', 'message': err})
 
     if r.status_code == requests.codes.ok:
         response = r.json()
