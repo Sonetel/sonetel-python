@@ -9,8 +9,10 @@ class Resource:
     Base recource class for Sonetel API
     """
     def __init__(self, access_token: str):
+
         if not access_token:
             raise e.AuthException("access_token is a required parameter.")
+            
         self._token: str = access_token
         self._decoded_token = decode_token(self._token)
         self._accountid: str = self._decoded_token['acc_id']
@@ -18,6 +20,20 @@ class Resource:
 
         if not is_valid_token(self._decoded_token):
             raise e.AuthException("Token has expired")
+    
+    def add(self):
+        raise NotImplementedError()
+
+    def get(self):
+        raise NotImplementedError()
+
+    def update(self):
+        raise NotImplementedError()
+    
+    def delete(self):
+        raise NotImplementedError()
+
+# Static methods
 
 def is_valid_token(decoded_token: dict) -> bool:
     """
@@ -68,15 +84,14 @@ def send_api_request(token: str,
         )
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        print(r.text)
+        raise Exception({'status': 'HTTPError', 'message': err})
     except requests.exceptions.ConnectionError as err:
         raise e.AuthException({'status': 'ConnectionError', 'message': err})
     except requests.exceptions.RequestException as err:
         raise e.AuthException({'status': 'RequestException', 'message': err})
 
     if r.status_code == requests.codes.ok:
-        response = r.json()
-        return response
+        return r.json()
     else:
         print(r.json())
         r.raise_for_status()
