@@ -33,17 +33,15 @@ class Recording(util.Resource):
 
         url = self._url
 
+        # Prepare the request URL based on the params passed to the method
         if rec_id:
             # Get a single recording
             url += f'/{rec_id}'
         else:
+            # Search for and return multiple recordings
             url += f'?account_id={self._accountid}'
 
-            # TODO:
-            #   1. Check start_time and end_time format
-            #   2. Check end_time > start_time
-
-            if start_time and end_time:
+            if util.is_valid_date(start_time) and util.is_valid_date(end_time) and util.date_diff(start_time, end_time):
                 url += f'&created_date_max={end_time}&created_date_min={start_time}'
 
             fields = []
@@ -63,4 +61,3 @@ class Recording(util.Resource):
         delete call recording
         """
         raise NotImplementedError
-

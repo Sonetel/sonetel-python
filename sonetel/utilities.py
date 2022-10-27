@@ -1,6 +1,7 @@
 import jwt
 import requests
 from time import time
+import datetime
 from . import constants as const
 from . import exceptions as e
 
@@ -42,6 +43,20 @@ def is_valid_token(decoded_token: dict) -> bool:
     # TODO: If token has expired, try to refresh it
     return decoded_token['exp'] - int(time()) > 60
 
+
+def is_valid_date(date_text):
+    # Based on https://stackoverflow.com/a/16870699/18276605
+    try:
+        datetime.datetime.strptime(date_text, '%Y%m%dT%H:%M:%SZ')
+        return True
+    except ValueError:
+        return False
+
+def date_diff(start, end):
+    start_date = datetime.datetime.strptime(start, '%Y%m%dT%H:%M:%SZ').strftime('%s')
+    end_date = datetime.datetime.strptime(end, '%Y%m%dT%H:%M:%SZ').strftime('%s')
+    return int(end_date) - int(start_date) > 0
+
 def decode_token(token) -> dict:
     """
     Decode the JWT token
@@ -51,6 +66,7 @@ def decode_token(token) -> dict:
         audience='api.sonetel.com',
         options={"verify_signature": False}
     )
+
 
 def send_api_request(token: str,
                      uri: str,
