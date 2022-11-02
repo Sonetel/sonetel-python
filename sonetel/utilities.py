@@ -100,7 +100,7 @@ def send_api_request(token: str,
         )
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        raise Exception({'status': 'HTTPError', 'message': err})
+        print({'status': 'HTTPError', 'message': err.response.text})
     except requests.exceptions.ConnectionError as err:
         raise e.AuthException({'status': 'ConnectionError', 'message': err})
     except requests.exceptions.RequestException as err:
