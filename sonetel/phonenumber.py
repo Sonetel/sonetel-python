@@ -71,7 +71,7 @@ class PhoneNumber(util.Resource):
         # Only return a list of e164 numbers, without any additional metadata
         if e164only:
             nums = []
-            for entry in response['response']:
+            for entry in response:
                 nums.append(entry['phnum'])
             return {
                 'status': 'success',
