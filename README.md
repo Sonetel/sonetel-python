@@ -4,10 +4,10 @@
     <img src="https://dl.dropboxusercontent.com/s/hn4o0v378od1aoo/logo_white_background.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">Sonetel API Python SDK</h3>
+<h3 align="center">Sonetel Python SDK</h3>
 
 <p align="center">
-    A simple Python module for using Sonetel's REST API endpoints.
+    Python package for using Sonetel's REST API endpoints.
     <br />
     <br />
     <a href="https://sonetel.com/en/developer/">Sonetel Developer Home</a>
@@ -21,32 +21,32 @@
 ## 1. Introduction
 The Sonetel API is a REST based web-service that enables you to manage your Sonetel account from your own platform or service. You can manage your account, your phone numbers and make callback calls etc.
 
-This Python module provides an easy-to-use interface to integrate Sonetel's APIs with your service. For more information about the API, please see the [documentation](https://docs.sonetel.com/).
+This Python package provides an easy-to-use interface to integrate Sonetel's APIs with your service. For more information about the API, please see the [documentation](https://docs.sonetel.com/).
 
 ## 2. Get Started
 
-To use the module, you need a Sonetel account. If you don't already have one, get a free account from <a href="https://app.sonetel.com/register?tag=api-developer&simple=true">sonetel.com</a>.
+To use the package, you need a Sonetel account. If you don't already have one, get a free account from <a href="https://app.sonetel.com/register?tag=api-developer&simple=true">sonetel.com</a>.
 
 ### 2.1 Installation
 
 #### 2.1.1 PIP
 
-This is the recommended way to install the module. This installs the latest stable version from the Python Package Index.
+This is the recommended way to install the module. It installs the latest stable version from the Python Package Index.
 
 `pip install sonetel`
 
 #### 2.1.2 Git
 
-To get the latest features, clone a specific [tag](https://github.com/Sonetel/sonetel-python/tags) and [follow these instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to build the module locally.
+To get the latest features, clone [the repository](https://github.com/Sonetel/sonetel-python) and [follow these instructions](https://packaging.python.org/en/latest/tutorials/packaging-projects/) to build the SDK locally.
 
 ### 2.2 Usage
 
-To use the SDK, add the following line to the top of your script.
+To use the SDK, add the following line to the top of your Python program.
 
 `import sonetel`
 
 Here's a description of the various modules and the methods available with each.
-#### 2.2.1 Auth module
+#### 2.2.1 Auth
 
 The Auth module is used to generate and manage access tokens.
 
