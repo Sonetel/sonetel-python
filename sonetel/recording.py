@@ -56,8 +56,13 @@ class Recording(util.Resource):
 
         return util.send_api_request(token=self._token, uri=url, method='get')
 
-    def delete(self, recording_id: str):
+    def delete(self, rec_id: str) -> dict:
         """
-        delete call recording
+        Delete a call recording.
+
+        :param rec_id: The ID of the recording that should be deleted
+        :returns: A representation of the deleted recording.
         """
-        raise NotImplementedError
+        url = f'{self._url}/{rec_id}'
+        # TODO: Before deleting, check if a recording with the given ID exists.
+        return util.send_api_request(token=self._token, uri=url, method='delete')
