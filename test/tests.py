@@ -27,11 +27,39 @@ def TestAuth(u, p, test_count):
     return token
 
 
-def TestAccount(token):
+def TestAccount(token, test_count):
     # To be implemented
-    assert True == True
+    a = sonetel.Account(token)
+    try:
+        assert type(a.get_accountid()) == type(123)
+    except AssertionError as e:
+        print(f'\t\t Failed {test_count}.1 get_accountid')
+    else:
+        print(f'\t\t Success {test_count}.1 get_accountid')
+    
+    try:
+        assert type(a.get_balance()) == type('string')
+    except AssertionError as e:
+        print(f'\t\t Failed {test_count}.2 get_balance')
+    else:
+        print(f'\t\t Success {test_count}.2 get_balance')
+    
+    try:
+        assert type(a.get_balance(currency=True)) == type('string')
+    except AssertionError as e:
+        print(f'\t\t Failed {test_count}.3 get_balance_currency')
+    else:
+        print(f'\t\t Success {test_count}.3 get_balance_currency')
+    
+    try:
+        assert type(a.get()) == type ({})
+    except AssertionError as e:
+        print(f'\t\t Failed {test_count}.4 get')
+    else:
+        print(f'\t\t success {test_count}.4 get')
+    
 
-def TestVoiceApps(token):
+def TestVoiceApps(token, test_count):
     # To be implemented
     assert True == True
 
@@ -39,8 +67,8 @@ def TestVoiceApps(token):
 def RunTest(test_name,token,test_count):
 
     try:
-        print(f"Test {test_count}")
-        test_name(token)
+        print(f"Test {test_count} - {test_name}")
+        test_name(token, test_count)
     except AssertionError as e:
         print(f'\tFail. {str(e)}')
     else:
