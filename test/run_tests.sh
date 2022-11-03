@@ -1,2 +1,4 @@
 #!/bin/bash
-sh -x setup.sh
+
+echo "** STARTING TESTS **"
+python3 tests.py
