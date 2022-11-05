@@ -1,7 +1,10 @@
-import jwt
-import requests
+"""
+Utilities
+"""
 from time import time
 import datetime
+import jwt
+import requests
 from . import constants as const
 from . import exceptions as e
 
@@ -13,7 +16,6 @@ class Resource:
 
         if not access_token:
             raise e.AuthException("access_token is a required parameter.")
-            
         self._token: str = access_token
         self._decoded_token = decode_token(self._token)
         self._accountid: str = self._decoded_token['acc_id']
@@ -21,17 +23,28 @@ class Resource:
 
         if not is_valid_token(self._decoded_token):
             raise e.AuthException("Token has expired")
-    
     def add(self):
+        """
+        Create a new resource
+        """
         raise NotImplementedError()
 
     def get(self):
+        """
+        Fetch an existing resource
+        """
         raise NotImplementedError()
 
     def update(self):
+        """
+        Update a resource
+        """
         raise NotImplementedError()
-    
+
     def delete(self):
+        """
+        Delete a resource
+        """
         raise NotImplementedError()
 
 # Static methods
@@ -43,8 +56,10 @@ def is_valid_token(decoded_token: dict) -> bool:
     # TODO: If token has expired, try to refresh it
     return decoded_token['exp'] - int(time()) > 60
 
-
 def is_valid_date(date_text):
+    """
+    Check if the passed date is in the correct format
+    """
     # Based on https://stackoverflow.com/a/16870699/18276605
     try:
         datetime.datetime.strptime(date_text, '%Y%m%dT%H:%M:%SZ')
@@ -53,6 +68,9 @@ def is_valid_date(date_text):
         return False
 
 def date_diff(start, end):
+    """
+    Check if the end date is greater than start date. Returns a boolean.
+    """
     start_date = datetime.datetime.strptime(start, '%Y%m%dT%H:%M:%SZ').strftime('%s')
     end_date = datetime.datetime.strptime(end, '%Y%m%dT%H:%M:%SZ').strftime('%s')
     return int(end_date) - int(start_date) > 0
@@ -72,7 +90,7 @@ def send_api_request(token: str,
                      uri: str,
                      method: str = 'GET',
                      body: str = None,
-                     bodyType: str = const.CONTENT_TYPE_GENERAL) -> dict:
+                     body_type: str = const.CONTENT_TYPE_GENERAL) -> dict:
     """
     Send an API request
     """
@@ -86,7 +104,7 @@ def send_api_request(token: str,
     # Prepare the request Header
     request_header = {
         "Authorization": "Bearer " + token,
-        "Content-Type": bodyType,
+        "Content-Type": body_type,
         "User-Agent": f'Sonetel Python Package - v{const.PKG_VERSION}'
     }
 
@@ -96,7 +114,8 @@ def send_api_request(token: str,
             method=method,
             url=uri,
             headers=request_header,
-            data=body
+            data=body,
+            timeout=60
         )
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
@@ -106,11 +125,12 @@ def send_api_request(token: str,
     except requests.exceptions.RequestException as err:
         raise e.AuthException({'status': 'RequestException', 'message': err})
 
+    # pylint: disable=no-member
     if r.status_code == requests.codes.ok:
         return r.json()
-    else:
-        print(r.json())
-        r.raise_for_status()
+
+    print(r.json())
+    r.raise_for_status()
 
 def prepare_error(code: int, message: str) -> dict:
     """
