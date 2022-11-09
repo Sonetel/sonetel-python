@@ -1,11 +1,18 @@
-import utilities as util
-import constants as const
+"""
+Voice apps
+"""
+from . import utilities as util
+from . import constants as const
+from . import exceptions as e
 
 class VoiceApp(util.Resource):
     """
     Voice app calss.
     """
     def __init__(self, access_token):
+        if not access_token:
+            e.AuthException('access_token is required')
+
         super().__init__(access_token=access_token)
         self._url = f'{const.API_URI_BASE}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_VOICEAPP}'
 
