@@ -1,11 +1,11 @@
 """
 Add and manage phone numbers in your Sonetel account.
 """
+import re
+from json import dumps
 from . import utilities as util
 from . import constants as const
-from json import dumps
 from . import exceptions as e
-import re
 
 
 def is_e164(number) -> bool:

@@ -1,9 +1,9 @@
 """
 Manage your Sonetel account
 """
+from json import dumps
 from . import utilities as util
 from . import constants as const
-from json import dumps
 from . import exceptions as e
 
 class Account(util.Resource):
