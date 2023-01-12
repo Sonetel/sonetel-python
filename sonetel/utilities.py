@@ -23,29 +23,6 @@ class Resource:
 
         if not is_valid_token(self._decoded_token):
             raise e.AuthException("Token has expired")
-    def add(self):
-        """
-        Create a new resource
-        """
-        raise NotImplementedError()
-
-    def get(self):
-        """
-        Fetch an existing resource
-        """
-        raise NotImplementedError()
-
-    def update(self):
-        """
-        Update a resource
-        """
-        raise NotImplementedError()
-
-    def delete(self):
-        """
-        Delete a resource
-        """
-        raise NotImplementedError()
 
 # Static methods
 
