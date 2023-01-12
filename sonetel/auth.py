@@ -1,7 +1,7 @@
 # Import Packages.
 from jwt import decode
-from . import constants as const
 import requests
+from . import constants as const
 from . import exceptions as e
 
 class Auth:
@@ -71,7 +71,8 @@ class Auth:
                 url=const.API_URI_AUTH,
                 data=body,
                 headers=headers,
-                auth=auth
+                auth=auth,
+                timeout=60
             )
             r.raise_for_status()
         except requests.exceptions.ConnectionError as err:
@@ -82,7 +83,7 @@ class Auth:
             raise e.AuthException({'status': 'Timeout', 'message': err})
 
         # Check the response and handle accordingly.
-        if r.status_code == requests.codes.ok:
+        if r.status_code == requests.codes.ok: # pylint: disable=no-member
             response_json = r.json()
 
             if refresh_token and grant_type == 'refresh_token':
