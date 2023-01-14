@@ -3,7 +3,7 @@ Manage call recordings
 """
 # Import Packages.
 from . import utilities as util
-from . import constants as const
+from . import _constants as const
 
 class Recording(util.Resource):
     """

@@ -4,7 +4,7 @@ Add and manage phone numbers in your Sonetel account.
 import re
 from json import dumps
 from . import utilities as util
-from . import constants as const
+from . import _constants as const
 from . import exceptions as e
 
 

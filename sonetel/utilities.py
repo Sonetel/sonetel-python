@@ -5,7 +5,7 @@ from time import time
 import datetime
 import jwt
 import requests
-from . import constants as const
+from . import _constants as const
 from . import exceptions as e
 
 class Resource:

@@ -2,7 +2,7 @@
 Voice apps
 """
 from . import utilities as util
-from . import constants as const
+from . import _constants as const
 from . import exceptions as e
 
 class VoiceApp(util.Resource):

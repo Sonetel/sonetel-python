@@ -1,7 +1,7 @@
 # Import Packages.
 from jwt import decode
 import requests
-from . import constants as const
+from . import _constants as const
 from . import exceptions as e
 
 class Auth:
