@@ -35,11 +35,11 @@ class Auth:
 
         **Documentation**: https://docs.sonetel.com/docs/sonetel-documentation/YXBpOjExMzI3NDM3-authentication
 
-        :param refresh: Optional. Flag to control whether refresh token is returned in the response. Defaults to 'yes'
+        :param refresh: Optional. Flag to return refresh token in the response. Accepted values 'yes' and 'no'. Defaults to 'yes'
         :param grant_type: Optional. The OAuth2 grant type - `password` and `refresh_token` accepted. Defaults to 'password'
-        :param refresh_token: Optional. Pass the `refresh_token` in this field to generate a new access_token.
+        :param refresh_token: Optional. Pass the `refresh_token` generated from a previous request in this field to generate a new access_token.
 
-        :return: Returns the access token.
+        :return: dict. The access token and refresh token if the request was processed successfully. If the request failed, the error message is returned.
         """
 
         # Checks
@@ -67,24 +67,24 @@ class Auth:
 
         # Send the request
         try:
-            r = requests.post(
+            req = requests.post(
                 url=const.API_URI_AUTH,
                 data=body,
                 headers=headers,
                 auth=auth,
                 timeout=60
             )
-            r.raise_for_status()
+            req.raise_for_status()
         except requests.exceptions.ConnectionError as err:
-            raise e.AuthException({'status': 'ConnectionError', 'message': err})
+            return {'status': 'failed', 'error': 'ConnectionError', 'message': err}
         except requests.exceptions.Timeout:
-            raise e.AuthException({'status': 'Timeout', 'message': 'Operation timed out. Please try again.'})
+            return {'status': 'failed', 'error': 'Timeout', 'message': 'Operation timed out. Please try again.'}
         except requests.exceptions.HTTPError as err:
-            raise e.AuthException({'status': 'Timeout', 'message': err})
+            return {'status': 'failed', 'error': 'Timeout', 'message': err}
 
         # Check the response and handle accordingly.
-        if r.status_code == requests.codes.ok: # pylint: disable=no-member
-            response_json = r.json()
+        if req.status_code == requests.codes.ok: # pylint: disable=no-member
+            response_json = req.json()
 
             if refresh_token and grant_type == 'refresh_token':
                 self._access_token = response_json["access_token"]
@@ -96,8 +96,7 @@ class Auth:
                 )
 
             return response_json
-        else:
-            raise e.AuthException(r.json())
+        return {'status': 'failed', 'error': 'Unknown error', 'message': req.text}
 
     def get_access_token(self):
         """
