@@ -2,6 +2,19 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
+## [0.2.0] - 26-04-2023
+### Added
+
+- Separate API endpoints.
+- Check if number is in E164 format before using it in any API request.
+- return a dict with status, message and error code if the inputs to a methods are invalid or missing.
+- Fetch call recordings
+- Load common strings from constants.py
+- Common functions moved to utilities.py
+- Wherever possible, classes support standard get, add, update and delete methods.
+- Allow users to update some account information.
+- Add account ID and user ID to the callback app name.
+
 ## [0.1.5] - 11-08-2022
 ### Fixed
 + Issue #1: add audience parameter to decode token function.

@@ -7,7 +7,7 @@
 <h3 align="center">Sonetel API Python Wrapper</h3>
 
 <p align="center">
-    A simple Python wrapper for using Sonetel's REST API endpoints.
+    A Python package to use Sonetel's REST APIs.
     <br />
     <br />
     <a href="https://sonetel.com/en/developer/">Sonetel Developer Home</a>
@@ -28,5 +28,5 @@
 To install the module built locally:
 + Copy the `sonetel-<VERSION>.tar.gz` file from the `dist/` folder into your project folder.
 + Run the command `pip install sonetel-<VERSION>.tar.gz`
-+ To import in your script, use `from sonetel import api`
-
++ To import in your script, use `import sonetel as sntl`.
+  + Alternatively, to use specific resources such as Auth use `from sonetel import Auth`
