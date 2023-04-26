@@ -13,6 +13,9 @@
 In order to test a Sonetel account is needed with the following setup:
 - At least 2 users.
 - Prepaid credit to test phone number purchase.
+- A couple of recorded phone calls to test the call recording module
+
+> Note: To test the User module, a new user is added to the Sonetel account and then deleted. This can incur charges if you are on a paid plan.
 
 ### Environment Variables
 
