@@ -6,7 +6,7 @@ Constants: API urls and other static data
 API_URI_BASE = 'https://public-api.sonetel.com'
 API_URI_AUTH = 'https://api.sonetel.com/SonetelAuth/beta/oauth/token'
 API_AUDIENCE = 'api.sonetel.com'
-PKG_VERSION = '1.0.0'
+PKG_VERSION = '0.2.0'
 
 # Headers
 CONTENT_TYPE_GENERAL = 'application/json;charset=UTF-8'
