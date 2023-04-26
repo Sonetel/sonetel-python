@@ -2,7 +2,7 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
-## [Unreleased]
+## [0.2.0] - 26-04-2023
 ### Added
 
 - Separate API endpoints.
@@ -13,6 +13,7 @@ All notable changes to the Sonetel Python Module are tracked in this file.
 - Common functions moved to utilities.py
 - Wherever possible, classes support standard get, add, update and delete methods.
 - Allow users to update some account information.
+- Add account ID and user ID to the callback app name.
 
 ## [0.1.5] - 11-08-2022
 ### Fixed
