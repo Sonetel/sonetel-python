@@ -1,5 +1,5 @@
 """
-Manage your Sonetel account
+Package to manage your Sonetel account using Sonetel API.
 """
 from json import dumps
 from . import utilities as util
@@ -20,9 +20,9 @@ class Account(util.Resource):
 
     def get(self) -> dict:
         """
-        Information about your Sonetel account.
+        Get information about your Sonetel account.
 
-        :returns: The account information.
+        :returns: The account information if the request was processed successfully.
         """
 
         return util.send_api_request(
@@ -39,7 +39,7 @@ class Account(util.Resource):
         :param language: String. The ID of the new language you want to switch to. Changes the language you see in app.sonetel.com
         :param timezone: String. The ID of the new timezone you want to switch to.
 
-        :returns: The updated account information if the request was processed successfully.
+        :returns: dict. The updated account information if the request was processed successfully.
         """
 
         body = {}
