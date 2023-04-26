@@ -64,5 +64,4 @@ class Recording(util.Resource):
         :returns: A representation of the deleted recording.
         """
         url = f'{self._url}/{rec_id}'
-        # TODO: Before deleting, check if a recording with the given ID exists.
         return util.send_api_request(token=self._token, uri=url, method='delete')

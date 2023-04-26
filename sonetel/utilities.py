@@ -41,7 +41,7 @@ def is_valid_date(date_text):
     try:
         datetime.datetime.strptime(date_text, '%Y%m%dT%H:%M:%SZ')
         return True
-    except ValueError:
+    except Exception:
         return False
 
 def date_diff(start, end):
