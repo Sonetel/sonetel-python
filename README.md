@@ -41,7 +41,7 @@ To get the latest features, clone [the repository](https://github.com/Sonetel/so
 
 ### 2.2 Usage
 
-To use the SDK, add the following line to the top of your Python program.
+To use the package, add the following line to the top of your Python program.
 
 `import sonetel`
 
@@ -126,14 +126,15 @@ It supports the following methods:
 
 ```python
 import os
-import sonetel
+from sonetel import Auth
+from sonetel import Account
 
 user = os.environ.get('sonetelUsername')
 pswd = os.environ.get('sonetelPassword')
 
-s = sonetel.Auth(username=user,password=pswd)
+s = Auth(username=user,password=pswd)
 
-a = sonetel.Account(s.get_access_token())
+a = Account(s.get_access_token())
 
 print(f"Your account ID is {a.get_accountid()} and your prepaid balance is {a.get_balance()}.")
 ```
