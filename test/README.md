@@ -1,13 +1,24 @@
 # Testing
 
-## Environment
-
-At the moment the test environment is setup using Bash scripts. If you're using Windows for development, use the Windows Subsystem for Linux.
-
 ## Start
 
-1. Build the module using `python3 -m build`.
-2. `cd` into the `tests` directory
-2. Start the automated tests using `sh run_tests.sh`
+1. `cd` into the `tests` directory
+2. Run `python setup.py install`
+3. Install Pytest if not already installed
+4. Run all tests using `pytest`
 
-**Note**: Remember to have the `sonetelUsername` and `sonetelPassword` environment variables setup before running the tests.
+## Prerequisites
+
+### Sonetel Account
+In order to test a Sonetel account is needed with the following setup:
+- At least 2 users.
+- Prepaid credit to test phone number purchase.
+
+### Environment Variables
+
+Set the following environment variables. These are used in unit tests.
+
+- `SonetelUsername` - The email address of a Sonetel account
+- `SonetelPassword` - Passsword for the above Sonetel account
+- `SonetelSelfUserId` - Unique ID of your own user account in Sonetel.
+- `SonetelTestUserId` - Unique ID of another user in your Sonetel account.
