@@ -13,27 +13,27 @@ class User(util.Resource):
 
     def __init__(self, access_token: str):
         if not access_token:
-            e.AuthException('access_token is required')
+            raise e.AuthException('access_token is required')
 
         super().__init__(access_token=access_token)
         self._url = f'{const.API_URI_BASE}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_USER}'
 
-    def get(self, all_users: str = True, userid: str = ''):
+    def get(self, all_users: bool = False, userid: str = ''):
         """
         Fetch details about all users or a specific user.
 
         If userid is not included with the request, details of the current user are fetched.
 
-        :param all_users: Boolean. Optional. Get a list of all the users in the account.
+        :param all_users: Boolean. Optional. Get a list of all the users in the account. Defaults to False.
         :param userid: String. Optional. ID of a specific user to get the information for.
         """
 
         url = self._url
 
         if userid:
-            url += f'{userid}'
+            url += userid
         elif not all_users:
-            url += f'{self._userid}'
+            url += self._userid
 
         return util.send_api_request(
             token=self._token,
