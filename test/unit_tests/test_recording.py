@@ -1,5 +1,4 @@
 import os
-import pytest
 from sonetel import Auth
 from sonetel import Recording
 from sonetel import exceptions as e
@@ -10,6 +9,7 @@ def access_token():
         return auth.get_access_token()
     except e.AuthException as error:
         raise e.AuthException(f"Error: {error}")
+
 
 token = access_token()
 

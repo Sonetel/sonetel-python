@@ -1,6 +1,4 @@
 import os
-import pytest
-import json
 from uuid import uuid4
 from sonetel import User
 from sonetel import Auth
@@ -14,6 +12,7 @@ def access_token():
     except e.AuthException as error:
         print(error)
         return None
+
 
 token = access_token()
 if token:

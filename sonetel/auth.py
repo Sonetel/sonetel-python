@@ -83,7 +83,7 @@ class Auth:
             return {'status': 'failed', 'error': 'Timeout', 'message': err}
 
         # Check the response and handle accordingly.
-        if req.status_code == requests.codes.ok: # pylint: disable=no-member
+        if req.status_code == requests.codes.ok:  # pylint: disable=no-member
             response_json = req.json()
 
             if refresh_token and grant_type == 'refresh_token':
