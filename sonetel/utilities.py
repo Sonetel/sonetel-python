@@ -1,5 +1,5 @@
 """
-Utilities
+Utilities for internal use
 """
 from time import time
 import datetime
@@ -69,7 +69,14 @@ def send_api_request(token: str,
                      body: str = None,
                      body_type: str = const.CONTENT_TYPE_GENERAL) -> dict:
     """
-    Send an API request
+    Send an API request to Sonetel.
+
+    :param token: Required. String. The access token.
+    :param uri: Required. String. The API endpoint to send the request to.
+    :param method: Optional. String. The HTTP method to use. Defaults to GET.
+    :param body: Optional. String. The body of the request. Defaults to None.
+    :param body_type: Optional. String. The content type of the body. Defaults to application/json.
+    :return: A dictionary containing the response.
     """
 
     # Checks
@@ -96,11 +103,11 @@ def send_api_request(token: str,
         )
         r.raise_for_status()
     except requests.exceptions.HTTPError as err:
-        print({'status': 'HTTPError', 'message': err.response.text})
+        return {'status': 'failed', 'error': 'HTTPError', 'message': err.response.text}
     except requests.exceptions.ConnectionError as err:
-        raise e.AuthException({'status': 'ConnectionError', 'message': err})
+        return {'status': 'failed', 'error': 'ConnectionError', 'message': err}
     except requests.exceptions.RequestException as err:
-        raise e.AuthException({'status': 'RequestException', 'message': err})
+        return {'status': 'failed', 'error': 'RequestException', 'message': err}
 
     # pylint: disable=no-member
     if r.status_code == requests.codes.ok:
