@@ -8,9 +8,12 @@ from . import _constants as const
 from . import exceptions as e
 
 
-def is_e164(number) -> bool:
+def is_e164(number: str) -> bool:
     """
-    Checks if a number is e164 formatted
+    Checks if a number is e164 formatted. Returns True if it is, False if it isn't.
+
+    :param number: The number to check. For example, +441234567890.
+    :return: True if the number is e164 formatted, False if it isn't.
     """
     if re.search(r'^\+?[1-9]\d{7,15}$', number):
         return True
@@ -64,8 +67,7 @@ class PhoneNumber(util.Resource):
         if response == 'No entries found':
             return {
                 'status': 'success',
-                'code': 0,
-                'message': 'No entries found'
+                'response': 'No entries found'
             }
 
         # Only return a list of e164 numbers, without any additional metadata
@@ -79,7 +81,10 @@ class PhoneNumber(util.Resource):
             }
 
         # Return full response
-        return response
+        return {
+                'status': 'success',
+                'response': response
+            }
 
     def add(self, number: str) -> dict:
         """
@@ -114,7 +119,10 @@ class PhoneNumber(util.Resource):
 
     def delete(self, number: str):
         """
-        Remove a number from account.
+        Remove a number from account. The phone number is removed immediately and cannot be recovered.
+
+        :param number: The phone number to remove from account.
+        :return: Dict containing the success response or an error message.
         """
         if not isinstance(number, str):
             number = str(number)
