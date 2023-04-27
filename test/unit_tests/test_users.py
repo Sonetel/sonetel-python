@@ -1,4 +1,5 @@
 import os
+import pytest
 from uuid import uuid4
 from sonetel import User
 from sonetel import Auth
@@ -20,10 +21,24 @@ if token:
 else:
     raise e.AuthException('Cannot get access token')
 
+def test_user_init():
+    # Test if the user object is initialized
+    assert user is not None
+
+def test_user_failed():
+    # Test if the user object initialization fails
+    with pytest.raises(Exception) as e_info:
+        User(access_token='eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJ1c2VyX2lkIjoiMjAwMDA0NjAwMCIsInVzZXJfbmFtZSI6InNhbV9kb2VAZXhhbXBsZS5jb20iLCJpc3MiOiJTb25ldGVsTm9kZTEyMyIsImV4cCI6IjE2ODQ0NzIxMDkiLCJpYXQiOiIxNjgxODgwMTA5IiwiYWNjX2lkIjoiMTIzNCIsImNsaWVudF9pZCI6InNvbmV0ZWwtd2ViIn0.ajVzgRfeLwB1IuMzldnzrmoUtUFFmh3QGmWQcs-3Flc')
+
 def test_get_all_users():
     response = user.get(all_users=True)
     print(response['response'])
     assert response['status'] == 'success'
+
+def test_get_invalid_user():
+    user_invalid = user.get(userid='1234567890')
+    assert user_invalid['status'] == 'success'
+    assert user_invalid['response'] == None
 
 def test_get_user():
     # Get a specific user
