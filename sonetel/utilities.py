@@ -113,7 +113,6 @@ def send_api_request(token: str,
     if r.status_code == requests.codes.ok:
         return r.json()
 
-    print(r.json())
     r.raise_for_status()
 
 def prepare_error(code: int, message: str) -> dict:
