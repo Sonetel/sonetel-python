@@ -18,7 +18,7 @@
   </p>
 </div>
 
-![GitHub](https://img.shields.io/github/license/sonetel/sonetel-python) &nbsp; ![PyPI](https://img.shields.io/pypi/v/sonetel) &nbsp; ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/sonetel/sonetel-python) &nbsp; ![GitHub issues](https://img.shields.io/github/issues/sonetel/sonetel-python) &nbsp;
+![GitHub](https://img.shields.io/github/license/sonetel/sonetel-python) &nbsp; ![PyPI](https://img.shields.io/pypi/v/sonetel) &nbsp; ![GitHub issues](https://img.shields.io/github/issues/sonetel/sonetel-python) &nbsp;
 
 ## 1. Introduction
 The Sonetel API is a REST based web-service that enables you to manage your Sonetel account from your own platform or service. You can manage your account, your phone numbers and make callback calls etc.
