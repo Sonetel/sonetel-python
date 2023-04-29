@@ -1,5 +1,15 @@
 """
-Package to manage your Sonetel account using Sonetel API.
+# Account
+
+This module contains the Account class which is used to view and update your Sonetel account information.
+
+The Account class contains the following methods:
+
+* `get()` - Get information about the Sonetel account.
+* `update()` - Update your account information.
+* `get_balance()` - Get the current prepaid balance in the account.
+* `get_accountid()` - Get your account ID.
+
 """
 from json import dumps
 from . import utilities as util
@@ -7,10 +17,6 @@ from . import _constants as const
 from . import exceptions as e
 
 class Account(util.Resource):
-    """
-    Class representing the company account.
-    """
-
     def __init__(self, access_token: str):
         if not access_token:
             raise e.AuthException('access_token missing')
@@ -20,9 +26,21 @@ class Account(util.Resource):
 
     def get(self) -> dict:
         """
-        Get information about your Sonetel account.
+        Get information about the Sonetel account.
 
-        :returns: The account information if the request was processed successfully.
+        Examples:
+            >>> account = Account(access_token='your_access_token')
+            >>> acc_info = account.get()
+            >>> print(acc_info['response']['name'])
+            'ACME Inc.'
+            >>> print(acc_info['response']['currency'])
+            'USD'
+        
+        Args:
+            None
+
+        Returns:
+            dict: The account information if the request was processed successfully.
         """
 
         return util.send_api_request(
@@ -35,11 +53,20 @@ class Account(util.Resource):
         """
         Update your account information. Pass one or more of the following parameters:
 
-        :param name: String. New company name.
-        :param language: String. The ID of the new language you want to switch to. Changes the language you see in app.sonetel.com
-        :param timezone: String. The ID of the new timezone you want to switch to.
+        Examples:
+            >>> account = Account(access_token='your_access_token')
+            >>> acc_info = account.update(name='ACME Inc.', language='en', timezone='Europe/Stockholm')
+            >>> print(acc_info['response']['name'])
+            'ACME Inc.'
 
-        :returns: dict. The updated account information if the request was processed successfully.
+        Args:
+            name (str): New company name.
+            language (str): The ID of the new language you want to switch to. Changes the language you see in app.sonetel.com
+            timezone (str): The ID of the new timezone you want to switch to.
+
+        Returns:
+            dict: The updated account information if the request was processed successfully.
+
         """
 
         body = {}
@@ -68,8 +95,19 @@ class Account(util.Resource):
         """
         Get the current prepaid balance in the account
 
-        :param currency: Boolean. Optional. Set to true if currency should be returned in the response.
-        :returns: A string representing the current prepaid balance in the Sonetel account.
+        Examples:
+            >>> account = Account(access_token='your_access_token')
+            >>> print(account.get_balance())
+            '1.23'
+            >>> print(account.get_balance(currency=True))
+            '1.23 USD'
+        
+        Args:
+            currency (bool): Optional. Set to true if currency should be returned in the response.
+
+        Returns:
+            str: A string representing the current prepaid balance in the Sonetel account.
+
         """
 
         response = util.send_api_request(

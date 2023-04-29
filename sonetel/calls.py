@@ -8,17 +8,15 @@ from . import _constants as const
 from . import exceptions as e
 
 class Call(util.Resource):
-    """
-    Phone call class
+    """Initiate callback calls using Sonetel's CallBack API.
+
+    :param access_token: Required. The access token generated from the Auth class.
+    :param app_name: Optional. The name of the app that is making the request. Defaults to 'PythonSonetelPackage'. This is used to identify the app in logs.
+
+    :return: Return the status code and message as a dict. For example, `{'code': 200, 'message': 'OK'}`
     """
 
     def __init__(self, access_token, app_name: str = 'PythonSonetelPackage') -> None:
-        """
-        Initiate the Call class.
-        
-        :param access_token: Required. The access token generated from the Auth class.
-        :param app_name: The name of the app that is making the request. Defaults to 'PythonSonetelPackage'.
-        """
         if not access_token:
             raise e.AuthException('access_token is required')
 
@@ -34,6 +32,13 @@ class Call(util.Resource):
         """
         Use Sonetel's CallBack API to make business quality international calls at the cost of 2 local calls.
 
+        :param num1: Required. The first phone number that will be called. This should be your phone number, SIP address or Sonetel email address.
+        :param num2: Required.The phone number or address that you wish to connect to.
+        :param cli1: Optional. The caller ID shown to the first person. Defaults to automatic.
+        :param cli2: Optional. The caller ID shown to the second person. Defaults to automatic.
+
+        :return: Return the status code and message as a dict.
+
         **Docs**: https://docs.sonetel.com/docs/sonetel-documentation/YXBpOjE1OTMzOTIy-make-calls
 
         **Number Format:**\n
@@ -48,13 +53,6 @@ class Call(util.Resource):
         available in your account. If you don't have a Sonetel number, then your verified mobile number is used as CLI.
         Read more at https://sonetel.com/cli
 
-        :param num1: Required. The first phone number that will be called.
-        This should be your phone number, SIP address or Sonetel email address.
-        :param num2: Required.The phone number or address that you wish to connect to.
-        :param cli1: Optional. The caller ID shown to the first person. Defaults to automatic.
-        :param cli2: Optional. The caller ID shown to the second person. Defaults to automatic.
-
-        :return: Return the status code and message as a dict.
         """
 
         # Check if num1 and num2 are defined.

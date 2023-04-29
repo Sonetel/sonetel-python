@@ -1,3 +1,14 @@
+"""
+# Auth
+
+This module contains the Auth class which is used to create, refresh and fetch tokens. It contains the following methods:
+
+* `create_token()` - Create an API access token from the user's Sonetel email address and password.
+* `get_access_token()` - Get the access token.
+* `get_decoded_token()` - Get the decoded access token.
+* `get_refresh_token()` - Get the refresh token.
+
+"""
 # Import Packages.
 from jwt import decode
 import requests
