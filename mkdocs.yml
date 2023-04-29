@@ -17,5 +17,7 @@ nav:
     - How-To Buy a Number: how-to-guides/buy-number.md
     - How-To Make a Call: how-to-guides/make-call.md
     - How to Get Prepaid balance: how-to-guides/get-prepaid-balance.md
-  - reference.md
-  - explanation.md
+  - Reference:
+    - Account: reference/account.md
+    - Auth: reference/auth.md
+    - Calls: reference/calls.md
