@@ -1,5 +1,5 @@
 """
-Make Phone Calls
+Make phone calls using Sonetel's CallBack API.
 """
 # Import Packages.
 from json import dumps
@@ -8,12 +8,21 @@ from . import _constants as const
 from . import exceptions as e
 
 class Call(util.Resource):
-    """Initiate callback calls using Sonetel's CallBack API.
+    """Use Sonetel's CallBack API to make business quality international calls at the cost of 2 local calls.
 
-    :param access_token: Required. The access token generated from the Auth class.
-    :param app_name: Optional. The name of the app that is making the request. Defaults to 'PythonSonetelPackage'. This is used to identify the app in logs.
+    See the [API documentation](https://docs.sonetel.com/docs/sonetel-documentation/YXBpOjE1OTMzOTIy-make-calls) for more information.
 
-    :return: Return the status code and message as a dict. For example, `{'code': 200, 'message': 'OK'}`
+    Examples:
+        >>> call = Call(access_token='your_access_token')
+        >>> call.callback(num1='+12125551234', num2='+44123456789')
+        {'statusCode': 202, "response": {"session_id": "1234567890"}}
+    
+    Args:
+        access_token (str, required): The access token generated from the Auth class.
+        app_name (str, optional): The name of the app that is making the request. Defaults to 'PythonSonetelPackage'. This is used to identify the app in logs.
+    
+    Returns:
+        dict (JSON): Return the status code and message as a dict.
     """
 
     def __init__(self, access_token, app_name: str = 'PythonSonetelPackage') -> None:
@@ -30,29 +39,29 @@ class Call(util.Resource):
 
     def callback(self, num1: str, num2: str, cli1: str = 'automatic', cli2: str = 'automatic'):
         """
-        Use Sonetel's CallBack API to make business quality international calls at the cost of 2 local calls.
 
-        :param num1: Required. The first phone number that will be called. This should be your phone number, SIP address or Sonetel email address.
-        :param num2: Required.The phone number or address that you wish to connect to.
-        :param cli1: Optional. The caller ID shown to the first person. Defaults to automatic.
-        :param cli2: Optional. The caller ID shown to the second person. Defaults to automatic.
+        ## Number Format
 
-        :return: Return the status code and message as a dict.
-
-        **Docs**: https://docs.sonetel.com/docs/sonetel-documentation/YXBpOjE1OTMzOTIy-make-calls
-
-        **Number Format:**\n
         It is recommended that both the phone numbers (num1 and num2) be entered in the international E164 format with a
         leading +. For example, if you want to call a US number (212) 555-1234, it should be set as `+12125551234`.
 
         However you can also provide SIP addresses. Additionally, `num1` can be your Sonetel username - this will make
         sure that the incoming call to you is handled as per your incoming settings defined in the app.
 
-        **Caller ID:**\n
+        ## Caller ID
+        
         It is best to use 'automatic' CLI as our system selects the best possible phone to be shown from the numbers
         available in your account. If you don't have a Sonetel number, then your verified mobile number is used as CLI.
         Read more at https://sonetel.com/cli
 
+        Args:
+            num1 (str): The first phone number that will be called. This should be your phone number, SIP address or Sonetel email address.
+            num2 (str): The phone number or address that you wish to connect to.
+            cli1 (str): Optional. The caller ID shown to the first person. Defaults to `automatic`.
+            cli2 (str): Optional. The caller ID shown to the second person. Defaults to `automatic`.
+
+        Returns:
+            response (dict): Return the JSON response from the API as a dict.
         """
 
         # Check if num1 and num2 are defined.

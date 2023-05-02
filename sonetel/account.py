@@ -1,9 +1,11 @@
 """
 # Account
 
-This module contains the Account class which is used to view and update your Sonetel account information.
+The Account class is used to manage your Sonetel account information. You can use it to get information about your account such as the current prepaid balance, the account ID, and more.
 
-The Account class contains the following methods:
+You can also update your account information such as the company name, language, and timezone.
+
+The class contains the following methods:
 
 * `get()` - Get information about the Sonetel account.
 * `update()` - Update your account information.
@@ -124,8 +126,17 @@ class Account(util.Resource):
 
     def get_accountid(self) -> str:
         """
-        Get your account ID.
+        Get your account ID. The account ID is used to uniquely identify your Sonetel account.
 
-        :returns: String. Sonetel account ID.
+        Examples:
+            >>> account = Account(access_token='your_access_token')
+            >>> print(account.get_accountid())
+            '123456789'
+
+        Args:
+            None
+
+        Returns:
+            str: The account ID.
         """
         return self._accountid
