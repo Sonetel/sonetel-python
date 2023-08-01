@@ -7,11 +7,4 @@ It allows you to quickly integrate Sonetel's communication services such as inte
 ## Get started
 
 - If you don't have an account, sign up from [sonetel.com](https://app.sonetel.com/register?tag=api-developer&simple=true)
-- Install sonetel-python using pip.
-
-## Project layout
-
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+- Install the `sonetel` package using pip.
