@@ -1,13 +1,13 @@
-# Welcome to MkDocs
+# Sonetel Python
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+`sonetel-python` is an open-source library for use with Sonetel's APIs.
 
-## Commands
+It allows you to quickly integrate Sonetel's communication services such as international calls, SMS, voice apps, AI services and much more with projects of any scale.
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+## Get started
+
+- If you don't have an account, sign up from [sonetel.com](https://app.sonetel.com/register?tag=api-developer&simple=true)
+- Install sonetel-python using pip.
 
 ## Project layout
 
