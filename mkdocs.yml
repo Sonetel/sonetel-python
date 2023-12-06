@@ -1,0 +1,22 @@
+site_name: Sonetel Python SDK
+
+theme:
+  name: "material"
+
+plugins:
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: false
+            show_bases: false
+
+nav:
+  - Home: index.md
+  - How-To Guides:
+    - How-To Make a Call: how-to-guides/make-call.md
+    - How to Get Prepaid balance: how-to-guides/get-prepaid-balance.md
+  - Reference:
+    - Account: reference/account.md
+    - Auth: reference/auth.md
+    - Calls: reference/calls.md
