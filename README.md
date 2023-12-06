@@ -18,7 +18,7 @@
   </p>
 </div>
 
-![GitHub](https://img.shields.io/github/license/sonetel/sonetel-python) &nbsp; ![PyPI](https://img.shields.io/pypi/v/sonetel) &nbsp; ![GitHub issues](https://img.shields.io/github/issues/sonetel/sonetel-python) &nbsp;
+![GitHub](https://img.shields.io/github/license/sonetel/sonetel-python) &nbsp; ![PyPI](https://img.shields.io/pypi/v/sonetel) &nbsp; ![GitHub issues](https://img.shields.io/github/issues/sonetel/sonetel-python) &nbsp; [![Documentation Status](https://readthedocs.org/projects/sonetel-python/badge/?version=latest)](https://sonetel-python.readthedocs.io/en/latest/?badge=latest)
 
 ## 1. Introduction
 The Sonetel API is a REST based web-service that enables you to manage your Sonetel account from your own platform or service. You can manage your account, your phone numbers and make callback calls etc.
@@ -124,7 +124,7 @@ It supports the following methods:
 3. `get_balance()` - Returns the prepaid balance. Pass the parameter `currency` = `True` to include the currency with the returned value.
 4. `get_accountid()` - Fetch the account ID.
 
-##### Print your Sonetel account ID and the current prepaid balance. 
+##### Print your Sonetel account ID and the current prepaid balance.
 
 ```python
 import os
@@ -149,7 +149,7 @@ It supports the `callback()` method which requires your mobile number and the nu
 
 ##### Make a callback call
 
-When making a callback call, `num1` is the destination where you will first answer the call before we call `num2`. This can be your mobile number, a SIP address or your Sonetel email address. 
+When making a callback call, `num1` is the destination where you will first answer the call before we call `num2`. This can be your mobile number, a SIP address or your Sonetel email address.
 
 If you set `num1` as your Sonetel email address, then the call will be handled as per your incoming call settings.
 
