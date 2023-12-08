@@ -8,3 +8,4 @@ from .calls import Call
 from .phonenumber import PhoneNumber
 from .recording import Recording
 from .users import User
+from .voiceapps import VoiceApp

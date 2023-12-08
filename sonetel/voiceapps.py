@@ -1,9 +1,9 @@
 """
 Voice apps
 """
-from . import utilities as util
 from . import _constants as const
 from . import exceptions as e
+from . import utilities as util
 
 
 class VoiceApp(util.Resource):
