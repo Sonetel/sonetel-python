@@ -20,3 +20,9 @@ repos:
     rev: v2.0.4
     hooks:
     -   id: autopep8
+-   repo: local
+    hooks:
+      - id: pytest-check
+        name: pytest-check
+        entry: pytest
+        language: system

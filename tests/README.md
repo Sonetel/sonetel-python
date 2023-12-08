@@ -2,9 +2,9 @@
 
 ## Start
 
-1. `cd` into the `tests` directory
-2. Run `python setup.py install`
-3. Install Pytest if not already installed
+1. Build the package using `python -m build`
+2. Install the package using pip from the `dist` directory. 
+3. Install pytest if not already installed
 4. Run all tests using `pytest`
 
 ## Prerequisites
