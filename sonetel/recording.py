@@ -22,21 +22,27 @@ class Recording(util.Resource):
             rec_id: str = None
             ):
         """
-        Get a list of all the call recordings.
+        Get a list of all the call recordings or a single recording.
+        Add the start_time and end_time to filter the recordings based on the created date.
+        When a recording ID is provided, the start_time and end_time are ignored.
 
-        :param start_time: The start timestamp in the format YYYYMMDDTHH:MM:SSZ. Example 20201231T23:59:59. Limit the results to recordings created after this timestamp.
-        :param end_time: The end timestamp in the format YYYYMMDDTHH:MM:SSZ. Example 20221123T18:59:59. Limit the results to recordings created before this timestamp.
+        To get the details needed to download the recording file, set file_access_details to True.
+
+        :param start_time: The start timestamp in the format YYYYMMDDTHH:MM:SSZ. Example 20201231T23:59:59. Limit the results to recordings created after this timestamp. Not used when a recording ID is provided.
+        :param end_time: The end timestamp in the format YYYYMMDDTHH:MM:SSZ. Example 20221123T18:59:59. Limit the results to recordings created before this timestamp. Not used when a recording ID is provided.
         :param rec_id: The unique recording ID. If not included, returns all the recordings.
         :param file_access_details: Boolean. Include the details needed to download recordings.
         :param voice_call_details: Boolean. Include the details of the voice calls.
         """
 
         url = self._url
+        field_prefix = '&'
 
         # Prepare the request URL based on the params passed to the method
         if rec_id:
             # Get a single recording
             url += f'/{rec_id}'
+            field_prefix = '?'
         else:
             # Search for and return multiple recordings
             url += f'?account_id={self._accountid}'
@@ -44,15 +50,15 @@ class Recording(util.Resource):
             if util.is_valid_date(start_time) and util.is_valid_date(end_time) and util.date_diff(start_time, end_time):
                 url += f'&created_date_max={end_time}&created_date_min={start_time}'
 
-            fields = []
+        fields = []
 
-            if file_access_details:
-                fields.append('file_access_details')
-            if voice_call_details:
-                fields.append('voice_call_details')
+        if file_access_details:
+            fields.append('file_access_details')
+        if voice_call_details:
+            fields.append('voice_call_details')
 
-            if len(fields) > 0:
-                url += '&fields=' + ','.join(fields)
+        if len(fields) > 0:
+            url += f'{field_prefix}fields=' + ','.join(fields)
 
         return util.send_api_request(token=self._token, uri=url, method='get')
 
