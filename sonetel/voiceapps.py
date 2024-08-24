@@ -1,9 +1,9 @@
 """
 Voice apps
 """
-from . import utilities as util
 from . import _constants as const
 from . import exceptions as e
+from . import utilities as util
 
 
 class VoiceApp(util.Resource):
@@ -28,3 +28,13 @@ class VoiceApp(util.Resource):
             self._url = f"{self._url}/{app_id}"
 
         return util.send_api_request(token=self._token, uri=self._url)
+
+    def delete(self, app_id: str):
+        """
+        Delete a voice app.
+
+        :param app_id: The ID of the voice app to delete.
+        """
+        self._url = f"{self._url}/{app_id}"
+
+        return util.send_api_request(token=self._token, uri=self._url, method="DELETE")
