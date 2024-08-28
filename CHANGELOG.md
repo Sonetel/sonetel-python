@@ -2,6 +2,13 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
+## [0.2.1] - 24-08-2024
+### Added
+- `delete()` method added to the VoiceApp class. Can be used to delete an existing voice app in the account.
+
+### Fixed
+- `get()` method in the Recording class didn't apply the optional parameters correctly. Fixed now.
+
 ## [0.2.0] - 26-04-2023
 ### Added
 
