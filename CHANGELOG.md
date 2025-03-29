@@ -2,6 +2,24 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
+## [0.3.0] - 28-03-2025
+### Added
+- HTTP Session Management with connection pooling for improved performance
+- Automatic retry mechanism with exponential backoff for failed requests
+- Configurable timeouts, retry settings, and connection pool parameters
+- Proper resource cleanup on program exit
+- Enhanced error handling and logging capabilities
+- New `configure()` function to customize SDK behavior
+
+### Changed
+- Optimized API request handling for better performance
+- Improved error reporting with more detailed messages
+- Updated docstrings to follow Google style format
+
+## [0.2.1] - Unreleased
+### Fixed
+- Minor bug fixes and improvements
+
 ## [0.2.0] - 26-04-2023
 ### Added
 
