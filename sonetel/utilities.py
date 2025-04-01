@@ -31,7 +31,7 @@ def get_session(**kwargs) -> SessionManager:
         The global SessionManager instance
     """
     global _session_manager
-    if _session_manager is None:
+    if _session_manager is None or kwargs:
         _session_manager = SessionManager(**kwargs)
     return _session_manager
 
