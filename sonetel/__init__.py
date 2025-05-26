@@ -65,7 +65,7 @@ def _cleanup():
         session.close()
         logger.debug("Sonetel SDK session closed")
     except Exception as e:
-        logger.debug(f"Error during cleanup: {e}")
+        logger.debug("Error during cleanup: %s", e)
 
 
 atexit.register(_cleanup)

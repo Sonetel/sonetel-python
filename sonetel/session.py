@@ -102,7 +102,7 @@ class SessionManager:
         start_time = time.time()
 
         try:
-            self.logger.debug(f"Sending {method} request to {url}")
+            self.logger.debug("Sending %s request to %s", method, url)
 
             response = self.session.request(
                 method=method,
@@ -118,7 +118,7 @@ class SessionManager:
 
             # Log request duration
             duration = time.time() - start_time
-            self.logger.debug(f"Request completed in {duration:.2f}s")
+            self.logger.debug("Request completed in %ss", format(duration, ".2f"))
 
             # Return JSON response if available
             if response.status_code == requests.codes.ok:
@@ -128,7 +128,7 @@ class SessionManager:
             return {"status": "unknown", "response": response.text}
 
         except requests.exceptions.HTTPError as err:
-            self.logger.error(f"HTTP Error: {err}")
+            self.logger.error("HTTP Error: %s", err)
             return {
                 "status": "failed",
                 "error": "HTTPError",
@@ -136,11 +136,11 @@ class SessionManager:
             }
 
         except requests.exceptions.ConnectionError as err:
-            self.logger.error(f"Connection Error: {err}")
+            self.logger.error("Connection Error: %s", err)
             return {"status": "failed", "error": "ConnectionError", "message": str(err)}
 
         except requests.exceptions.Timeout as err:
-            self.logger.error(f"Timeout Error: {err}")
+            self.logger.error("Timeout Error: %s", err)
             return {
                 "status": "failed",
                 "error": "Timeout",
@@ -148,7 +148,7 @@ class SessionManager:
             }
 
         except requests.exceptions.RequestException as err:
-            self.logger.error(f"Request Exception: {err}")
+            self.logger.error("Request Exception: %s", err)
             return {
                 "status": "failed",
                 "error": "RequestException",

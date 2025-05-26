@@ -99,7 +99,7 @@ def send_api_request(
     token: str,
     uri: str,
     method: str = "GET",
-    body: str = None,
+    body: str = "",
     body_type: str = const.CONTENT_TYPE_GENERAL,
 ) -> dict:
     """
@@ -109,7 +109,7 @@ def send_api_request(
         token: Required. String. The access token.
         uri: Required. String. The API endpoint to send the request to.
         method: Optional. String. The HTTP method to use. Defaults to GET.
-        body: Optional. String. The body of the request. Defaults to None.
+        body: Optional. String. The body of the request. Defaults to an empty string.
         body_type: Optional. String. The content type of the body. Defaults to application/json.
 
     Returns:
