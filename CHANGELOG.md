@@ -2,9 +2,21 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
-## [0.2.1] - 24-08-2024
+## [0.3.0] - 28-03-2025
+
 ### Added
+- HTTP Session Management with connection pooling for improved performance
+- Automatic retry mechanism with exponential backoff for failed requests
+- Configurable timeouts, retry settings, and connection pool parameters
+- Proper resource cleanup on program exit
+- Enhanced error handling and logging capabilities
+- New `configure()` function to customize SDK behavior
 - `delete()` method added to the VoiceApp class. Can be used to delete an existing voice app in the account.
+
+### Changed
+- Optimized API request handling for better performance
+- Improved error reporting with more detailed messages
+- Updated docstrings to follow Google style format
 
 ### Fixed
 - `get()` method in the Recording class didn't apply the optional parameters correctly. Fixed now.
