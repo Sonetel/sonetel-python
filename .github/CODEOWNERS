@@ -1,0 +1,8 @@
+# CODEOWNERS
+# Added 2026-06 as part of the Sonetel org-wide repo-governance review (tech-debt issue #13).
+# Assigns the reviewed code owner(s) for this repository.
+#
+# NOTE: This file only auto-requests the listed owner(s) as reviewers on future PRs.
+# It does NOT gate or block merges. Required-review enforcement is a separate step
+# (tracked in issue #8) and is intentionally NOT enabled by this change.
+* @aashish-joshi
