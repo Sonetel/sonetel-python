@@ -9,10 +9,10 @@ lifecycle: inactive
 
 # sonetel-python
 
-> A simple python wrapper for using Sonetel's REST APIs
+> A simple Python wrapper / SDK for using Sonetel's REST APIs.
 
 ## What it contains
-<!-- The actual contents — services, modules, assets. Fill in. -->
+The official `sonetel` Python SDK (published to PyPI, docs on Read the Docs) wrapping Sonetel's REST API. The `sonetel/` package exposes modules for auth/token management (`auth.py`), account (`account.py`), calls/callback (`calls.py`), phone numbers (`phonenumber.py`), recordings (`recording.py`), users (`users.py`) and voice apps (`voiceapps.py`), with packaging via `setup.py`/`pyproject.toml`, MkDocs how-to/reference docs, and a `tests/` suite.
 
 ## Ownership
 - **Code owner:** Aashish Joshi (aashish-joshi)
