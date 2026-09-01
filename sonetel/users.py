@@ -2,9 +2,11 @@
 Users
 """
 from json import dumps
-from . import utilities as util
+
 from . import _constants as const
 from . import exceptions as e
+from . import utilities as util
+
 
 class User(util.Resource):
     """
@@ -13,12 +15,12 @@ class User(util.Resource):
 
     def __init__(self, access_token: str):
         if not access_token:
-            raise e.AuthException('access_token is required')
+            raise e.AuthException("access_token is required")
 
         super().__init__(access_token=access_token)
-        self._url = f'{const.API_URI_BASE}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_USER}'
+        self._url = f"{const.API_URI_BASE}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_USER}"
 
-    def get(self, all_users: bool = False, userid: str = ''):
+    def get(self, all_users: bool = False, userid: str = ""):
         """
         Fetch details about all users or a specific user.
 
@@ -32,21 +34,26 @@ class User(util.Resource):
 
         if userid:
             url += userid
-        elif not all_users:
+        elif all_users:
+            # The list endpoint 404s with the trailing slash baked into API_ENDPOINT_USER.
+            url = url.rstrip("/")
+        else:
             url += self._userid
 
-        return util.send_api_request(
-            token=self._token,
-            uri=url,
-            method='get') if util.is_valid_token(self._decoded_token) else False
+        return (
+            util.send_api_request(token=self._token, uri=url, method="get")
+            if util.is_valid_token(self._decoded_token)
+            else False
+        )
 
-    def add(self,
-            email: str,
-            f_name: str,
-            l_name: str,
-            password: str,
-            user_type: str = 'regular'
-            ) -> dict:
+    def add(
+        self,
+        email: str,
+        f_name: str,
+        l_name: str,
+        password: str,
+        user_type: str = "regular",
+    ) -> dict:
         """
         Adds a new user. Account admin privilege required.
 
@@ -61,43 +68,36 @@ class User(util.Resource):
         # Checks
         if not password:
             return util.prepare_error(
-                code=const.ERR_USER_DETAIL_EMPTY,
-                message='password cannot be empty'
+                code=const.ERR_USER_DETAIL_EMPTY, message="password cannot be empty"
             )
 
         if not email:
             return util.prepare_error(
-                code=const.ERR_USER_DETAIL_EMPTY,
-                message='email cannot be empty'
+                code=const.ERR_USER_DETAIL_EMPTY, message="email cannot be empty"
             )
 
         if not f_name:
             return util.prepare_error(
-                code=const.ERR_USER_DETAIL_EMPTY,
-                message='first name cannot be empty'
+                code=const.ERR_USER_DETAIL_EMPTY, message="first name cannot be empty"
             )
 
         if not l_name:
             return util.prepare_error(
-                code=const.ERR_USER_DETAIL_EMPTY,
-                message='last name cannot be empty'
+                code=const.ERR_USER_DETAIL_EMPTY, message="last name cannot be empty"
             )
 
         # Request
-        url = self._url
+        url = self._url.rstrip("/")
         body = {
             "user_fname": f_name,
             "user_lname": l_name,
             "email": email,
             "password": password,
-            "type": user_type
+            "type": user_type,
         }
 
         return util.send_api_request(
-            token=self._token,
-            uri=url,
-            method='post',
-            body=dumps(body)
+            token=self._token, uri=url, method="post", body=dumps(body)
         )
 
     def delete(self, userid: str):
@@ -108,17 +108,12 @@ class User(util.Resource):
         """
         if not userid:
             return util.prepare_error(
-                code=const.ERR_USED_ID_EMPTY,
-                message='user id cannot be empty'
+                code=const.ERR_USED_ID_EMPTY, message="user id cannot be empty"
             )
 
         url = self._url + userid
 
-        return util.send_api_request(
-            token=self._token,
-            uri=url,
-            method='delete'
-            )
+        return util.send_api_request(token=self._token, uri=url, method="delete")
 
     def update(self, request: dict):
         """

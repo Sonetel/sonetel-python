@@ -38,8 +38,8 @@ The `Auth` class takes two parameters, the username and password. The `get_acces
 
 
 ```python
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 auth = Auth(user,pswd)
 
@@ -79,8 +79,8 @@ The current prepaid balance is:  1.23 USD
 import os
 from sonetel import Auth, Account
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 auth = Auth(user,pswd)
 access_token = auth.get_access_token()

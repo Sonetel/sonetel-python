@@ -44,8 +44,8 @@ The `Auth` class takes two parameters, the username and password. The `get_acces
 
 
 ```python
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 auth = Auth(user,pswd)
 
@@ -94,8 +94,8 @@ A successful API response looks like this:
 import os
 from sonetel import Auth, Call
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 auth = Auth(user,pswd)
 access_token = auth.get_access_token()
