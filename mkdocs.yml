@@ -20,3 +20,4 @@ nav:
     - Account: reference/account.md
     - Auth: reference/auth.md
     - Calls: reference/calls.md
+    - Configuration: reference/configuration.md

@@ -1,6 +1,7 @@
 """
 Voice apps
 """
+
 from . import _constants as const
 from . import exceptions as e
 from . import utilities as util
@@ -18,7 +19,7 @@ class VoiceApp(util.Resource):
         super().__init__(access_token=access_token)
         self._url = f"{const.API_URI_BASE}{const.API_ENDPOINT_ACCOUNT}{self._accountid}{const.API_ENDPOINT_VOICEAPP}"
 
-    def get(self, app_id: str = None):
+    def get(self, app_id: str = ""):
         """
         Get voice apps. Specify the app_id to get a specific voice app or leave it blank to get all voice apps in the Sonetel account.
 

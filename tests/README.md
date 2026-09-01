@@ -24,4 +24,4 @@ Set the following environment variables. These are used in unit tests.
 - `SonetelUsername` - The email address of a Sonetel account
 - `SonetelPassword` - Passsword for the above Sonetel account
 - `SonetelSelfUserId` - Unique ID of your own user account in Sonetel.
-- `SonetelTestUserId` - Unique ID of another user in your Sonetel account.
+- `SonetelTestUserId` - Unique ID of another user in your Sonetel account

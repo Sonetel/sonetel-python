@@ -21,6 +21,7 @@
 ![GitHub](https://img.shields.io/github/license/sonetel/sonetel-python) &nbsp; ![PyPI](https://img.shields.io/pypi/v/sonetel) &nbsp; ![GitHub issues](https://img.shields.io/github/issues/sonetel/sonetel-python) &nbsp; [![Documentation Status](https://readthedocs.org/projects/sonetel-python/badge/?version=latest)](https://sonetel-python.readthedocs.io/en/latest/?badge=latest)
 
 ## 1. Introduction
+
 The Sonetel API is a REST based web-service that enables you to manage your Sonetel account from your own platform or service. You can manage your account, your phone numbers and make callback calls etc.
 
 This Python package provides an easy-to-use interface to integrate Sonetel's APIs with your service. For more information about the API, please see the [documentation](https://docs.sonetel.com/).
@@ -48,6 +49,7 @@ To use the package, add the following line to the top of your Python program.
 `import sonetel`
 
 Here's a description of the various modules and the methods available with each.
+
 #### 2.2.1 Auth
 
 The Auth module is used to generate and manage access tokens.
@@ -73,7 +75,7 @@ s = sntl.Auth(username=user, password=pswd)
 print(s.get_access_token())
 ```
 
-#####  Refresh access token
+##### Refresh access token
 
 When your access token has expired, you can use the `create_token()` method to get a new `access_token` & `refresh_token`.
 
@@ -124,7 +126,7 @@ It supports the following methods:
 3. `get_balance()` - Returns the prepaid balance. Pass the parameter `currency` = `True` to include the currency with the returned value.
 4. `get_accountid()` - Fetch the account ID.
 
-##### Print your Sonetel account ID and the current prepaid balance.
+##### Print your Sonetel account ID and the current prepaid balance
 
 ```python
 import os
@@ -198,6 +200,37 @@ print(ph.get())
 
 ```
 
+## SDK Configuration
+
+The Sonetel SDK now supports customizable configuration options for HTTP connections, retries, and logging. You can configure these settings using the `configure()` function:
+
+```python
+import sonetel
+
+# Configure the SDK with custom settings
+sonetel.configure(
+    timeout=(5, 60),  # (connect_timeout, read_timeout) in seconds
+    max_retries=5,    # Maximum number of retries for failed requests
+    backoff_factor=0.5,  # Exponential backoff factor
+    pool_connections=20,  # Number of connection pools
+    pool_maxsize=20,      # Maximum connections per pool
+    log_level="DEBUG"     # Logging level (DEBUG, INFO, WARNING, ERROR)
+)
+
+# Then use the SDK as normal
+user = os.environ.get('sonetelUsername')
+pswd = os.environ.get('sonetelPassword')
+auth = sonetel.Auth(username=user, password=pswd)
+```
+
+### Performance Improvements
+
+The SDK now uses connection pooling and automatic retries to improve performance and reliability:
+
+- **Connection Pooling**: Reuses HTTP connections to reduce latency and overhead
+- **Automatic Retries**: Automatically retries failed requests with exponential backoff
+- **Proper Resource Cleanup**: Automatically closes connections when your program exits
+
 ## Storing your credentials
 
 Please keep your Sonetel login credentials safe to avoid any misuse of your account. Do not hard code them into scripts or save them in files that are saved in any form of version control.
@@ -220,6 +253,6 @@ print(s.get_access_token())
 
 ## Help
 
-For help with the Sonetel API, have a look at the <a href="https://docs.sonetel.com">API documentation</a>.
+For help with the Sonetel API, have a look at the [API documentation](https://docs.sonetel.com)</a>.
 
 If you have an issue with the module, please [report an issue](https://github.com/Sonetel/sonetel-python/issues/issues) on GitHub.
