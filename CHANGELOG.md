@@ -2,7 +2,7 @@
 
 All notable changes to the Sonetel Python Module are tracked in this file.
 
-## [0.3.0] - 28-03-2025
+## [Unreleased] - 0.3.0
 
 ### Added
 - HTTP Session Management with connection pooling for improved performance
@@ -11,12 +11,23 @@ All notable changes to the Sonetel Python Module are tracked in this file.
 - Proper resource cleanup on program exit
 - Enhanced error handling and logging capabilities
 - New `configure()` function to customize SDK behavior
-- `delete()` method added to the VoiceApp class. Can be used to delete an existing voice app in the account.
 
 ### Changed
 - Optimized API request handling for better performance
 - Improved error reporting with more detailed messages
 - Updated docstrings to follow Google style format
+
+### Fixed
+- `User.get(all_users=True)` and `User.add()` sent requests to a trailing-slash
+  collection URL that the API 404s on.
+- `date_diff()` used a non-portable `strftime('%s')` call that raised on
+  non-glibc platforms.
+- `Account.get_accountid()` could return an `int` despite its documented
+  `str` return type.
+
+## [0.2.1] - 24-08-2024
+### Added
+- `delete()` method added to the VoiceApp class. Can be used to delete an existing voice app in the account.
 
 ### Fixed
 - `get()` method in the Recording class didn't apply the optional parameters correctly. Fixed now.
@@ -58,7 +69,7 @@ All notable changes to the Sonetel Python Module are tracked in this file.
 ## [0.1.2] - 25-07-2022
 
 ### Changes
-+ Fix issue in `subscription_listnums()` that doesn't return anything when `e164only=False`. 
++ Fix issue in `subscription_listnums()` that doesn't return anything when `e164only=False`.
 
 ## [0.1.1] - 22-07-2022
 
