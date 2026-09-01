@@ -14,19 +14,23 @@ The class contains the following methods:
 
 """
 from json import dumps
-from . import utilities as util
+
 from . import _constants as const
 from . import exceptions as e
+from . import utilities as util
+
 
 class Account(util.Resource):
     def __init__(self, access_token: str):
         if not access_token:
-            raise e.AuthException('access_token missing')
+            raise e.AuthException("access_token missing")
 
         super().__init__(access_token=access_token)
-        self._url = f'{const.API_URI_BASE}/{const.API_ENDPOINT_ACCOUNT}/{self._accountid}'
+        self._url = (
+            f"{const.API_URI_BASE}/{const.API_ENDPOINT_ACCOUNT}/{self._accountid}"
+        )
 
-    def get(self) -> dict:
+    def get(self, fields: str = "") -> dict:
         """
         Get information about the Sonetel account.
 
@@ -37,21 +41,27 @@ class Account(util.Resource):
             'ACME Inc.'
             >>> print(acc_info['response']['currency'])
             'USD'
-        
+
         Args:
-            None
+            fields (str): Optional. Comma separated list of extra fields to include,
+                e.g. 'usage,service_settings'. Valid values: call_recording_settings,
+                autorefill_settings, notifications, usage, service_settings.
 
         Returns:
             dict: The account information if the request was processed successfully.
         """
 
+        url = self._url
+        if fields:
+            url += f"?fields={fields}"
+
         return util.send_api_request(
             token=self._token,
-            uri=self._url,
-            method='get',
+            uri=url,
+            method="get",
         )
 
-    def update(self, name: str = '', language: str = '', timezone: str = '') -> dict:
+    def update(self, name: str = "", language: str = "", timezone: str = "") -> dict:
         """
         Update your account information. Pass one or more of the following parameters:
 
@@ -73,24 +83,19 @@ class Account(util.Resource):
 
         body = {}
         if name:
-            body['name'] = name
+            body["name"] = name
         if language:
-            body['language'] = language
+            body["language"] = language
         if timezone:
-            body['timezone_details'] = {
-                "zone_id": timezone
-            }
+            body["timezone_details"] = {"zone_id": timezone}
         if len(body) == 0:
             return util.prepare_error(
                 code=const.ERR_ACCOUNT_UPDATE_BODY_EMPTY,
-                message='request body cannot be empty'
+                message="request body cannot be empty",
             )
 
         return util.send_api_request(
-            token=self._token,
-            uri=self._url,
-            method='put',
-            body=dumps(body)
+            token=self._token, uri=self._url, method="put", body=dumps(body)
         )
 
     def get_balance(self, currency: bool = False) -> str:
@@ -103,7 +108,7 @@ class Account(util.Resource):
             '1.23'
             >>> print(account.get_balance(currency=True))
             '1.23 USD'
-        
+
         Args:
             currency (bool): Optional. Set to true if currency should be returned in the response.
 
@@ -115,10 +120,10 @@ class Account(util.Resource):
         response = util.send_api_request(
             token=self._token,
             uri=self._url,
-            method='get',
+            method="get",
         )
 
-        balance = response['response']['credit_balance']
+        balance = response["response"]["credit_balance"]
         if currency:
             balance += f" {response['response']['currency']}"
 

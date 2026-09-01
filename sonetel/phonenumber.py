@@ -3,9 +3,11 @@ Add and manage phone numbers in your Sonetel account.
 """
 import re
 from json import dumps
-from . import utilities as util
+from urllib.parse import urlencode
+
 from . import _constants as const
 from . import exceptions as e
+from . import utilities as util
 
 
 def is_e164(number: str) -> bool:
@@ -15,7 +17,7 @@ def is_e164(number: str) -> bool:
     :param number: The number to check. For example, +441234567890.
     :return: True if the number is e164 formatted, False if it isn't.
     """
-    if re.search(r'^\+?[1-9]\d{7,15}$', number):
+    if re.search(r"^\+?[1-9]\d{7,15}$", number):
         return True
     return False
 
@@ -27,13 +29,15 @@ class PhoneNumber(util.Resource):
 
     def __init__(self, access_token):
         if not access_token:
-            raise e.AuthException('access_token is required')
+            raise e.AuthException("access_token is required")
 
         super().__init__(access_token=access_token)
-        self._url = f'{const.API_URI_BASE}{const.API_ENDPOINT_ACCOUNT}{self._accountid}' \
-                    f'{const.API_ENDPOINT_NUMBERSUBSCRIPTION}'
+        self._url = (
+            f"{const.API_URI_BASE}{const.API_ENDPOINT_ACCOUNT}{self._accountid}"
+            f"{const.API_ENDPOINT_NUMBERSUBSCRIPTION}"
+        )
 
-    def get(self, e164only: bool = True, number: str = '') -> dict:
+    def get(self, e164only: bool = True, number: str = "") -> dict:
         """
         List all the phone numbers present in the account.
 
@@ -57,34 +61,25 @@ class PhoneNumber(util.Resource):
             else:
                 return util.prepare_error(
                     code=const.ERR_NUM_NOT_E164,
-                    message=f'"{number}" is not a valid e164 number'
+                    message=f'"{number}" is not a valid e164 number',
                 )
 
         api_response = util.send_api_request(token=self._token, uri=url)
-        response = api_response['response']
+        response = api_response["response"]
 
         # No numbers are found
-        if response == 'No entries found':
-            return {
-                'status': 'success',
-                'response': 'No entries found'
-            }
+        if response == "No entries found":
+            return {"status": "success", "response": "No entries found"}
 
         # Only return a list of e164 numbers, without any additional metadata
         if e164only:
             nums = []
             for entry in response:
-                nums.append(entry['phnum'])
-            return {
-                'status': 'success',
-                'response': nums
-            }
+                nums.append(entry["phnum"])
+            return {"status": "success", "response": nums}
 
         # Return full response
-        return {
-                'status': 'success',
-                'response': response
-            }
+        return {"status": "success", "response": response}
 
     def add(self, number: str) -> dict:
         """
@@ -101,20 +96,15 @@ class PhoneNumber(util.Resource):
 
         # Request body
         if is_e164(number):
-            body = {
-                "phnum": number
-            }
+            body = {"phnum": number}
         else:
             return util.prepare_error(
                 code=const.ERR_NUM_NOT_E164,
-                message=f'"{number}" is not a valid e164 number'
+                message=f'"{number}" is not a valid e164 number',
             )
 
         return util.send_api_request(
-            token=self._token,
-            uri=self._url,
-            method='post',
-            body=dumps(body)
+            token=self._token, uri=self._url, method="post", body=dumps(body)
         )
 
     def delete(self, number: str):
@@ -128,18 +118,14 @@ class PhoneNumber(util.Resource):
             number = str(number)
 
         if is_e164(number):
-            url = f'{self._url}{number}'
+            url = f"{self._url}{number}"
         else:
             return util.prepare_error(
                 code=const.ERR_NUM_NOT_E164,
-                message=f'"{number}" is not a valid e164 number'
+                message=f'"{number}" is not a valid e164 number',
             )
 
-        return util.send_api_request(
-            token=self._token,
-            uri=url,
-            method='delete'
-        )
+        return util.send_api_request(token=self._token, uri=url, method="delete")
 
     def update(self, number: str, connect_to_type: str, connect_to) -> dict:
         """
@@ -154,31 +140,69 @@ class PhoneNumber(util.Resource):
         if not number:
             return util.prepare_error(
                 code=const.ERR_NUM_UPDATE_EMPTY,
-                message='number is required to update call settings'
+                message="number is required to update call settings",
             )
         if not connect_to:
             return util.prepare_error(
                 code=const.ERR_NUM_UPDATE_EMPTY,
-                message='connect_to is required to update call settings'
+                message="connect_to is required to update call settings",
             )
         if connect_to_type not in const.CONST_CONNECT_TO_TYPES:
             return util.prepare_error(
                 code=const.ERR_NUM_UPDATE_EMPTY,
-                message=f'invalid connect_to_type value - {connect_to_type}'
+                message=f"invalid connect_to_type value - {connect_to_type}",
             )
 
         # Prepare request
-        body = {
-            "connect_to_type": connect_to_type,
-            "connect_to": connect_to
-        }
+        body = {"connect_to_type": connect_to_type, "connect_to": connect_to}
 
-        url = f'{self._url}{number}'
+        url = f"{self._url}{number}"
 
         # Return result
         return util.send_api_request(
-            token=self._token,
-            uri=url,
-            method='put',
-            body=dumps(body)
+            token=self._token, uri=url, method="put", body=dumps(body)
         )
+
+    def country(self, **filters) -> dict:
+        """
+        Browse phone number support and pricing by country. Does not require purchase-level detail.
+
+        :param filters: Optional query filters, e.g. country='GBR', type='mobile', phnum_support='yes'.
+            See https://docs.sonetel.com for the full list of supported filters.
+        :return: Dict containing countries and the phone number types supported in each.
+        """
+        url = const.API_URI_BASE + const.API_ENDPOINT_COUNTRY
+        if filters:
+            url += f"?{urlencode(filters)}"
+
+        return util.send_api_request(token=self._token, uri=url)
+
+    def stock_summary(self, country: str, area_code: str = "", city: str = "") -> dict:
+        """
+        Get the count of phone numbers available in stock for a country, broken down by area code.
+
+        :param country: Three letter ISO country code, e.g. 'USA'.
+        :param area_code: Optional. Limit the results to a specific area code.
+        :param city: Optional. Search by exact or partial city name.
+        :return: Dict containing the number stock summary for the country.
+        """
+        url = f"{const.API_URI_BASE}{const.API_ENDPOINT_NUMBERSTOCK}{country}"
+        params = {k: v for k, v in {"area_code": area_code, "city": city}.items() if v}
+        if params:
+            url += f"?{urlencode(params)}"
+
+        return util.send_api_request(token=self._token, uri=url)
+
+    def available_numbers(self, country: str, **filters) -> dict:
+        """
+        Get a list of phone numbers available for purchase from a country, with pricing.
+
+        :param country: Three letter ISO country code, e.g. 'USA'.
+        :param filters: Optional query filters, e.g. type='mobile', area_code='212', city='New York'.
+        :return: Dict containing the available phone numbers.
+        """
+        url = f"{const.API_URI_BASE}{const.API_ENDPOINT_NUMBERSTOCK}{country}/availablephonenumber"
+        if filters:
+            url += f"?{urlencode(filters)}"
+
+        return util.send_api_request(token=self._token, uri=url)

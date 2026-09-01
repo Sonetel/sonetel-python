@@ -25,6 +25,8 @@ API_ENDPOINT_NUMBERSUBSCRIPTION = "/phonenumbersubscription/"
 API_ENDPOINT_VOICEAPP = "/voiceapp/"
 API_ENDPOINT_USER = "/user/"
 API_ENDPOINT_CALL_RECORDING = "/call-recording"
+API_ENDPOINT_COUNTRY = "/country"
+API_ENDPOINT_NUMBERSTOCK = "/numberstocksummary/"
 
 # Users
 CONST_TYPES_USER = ["regular", "admin"]
