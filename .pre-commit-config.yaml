@@ -24,6 +24,7 @@ repos:
     rev: v2.3.2
     hooks:
     -   id: autopep8
+        args: ["--in-place", "--max-line-length=88"]
 -   repo: local
     hooks:
       - id: pytest-check
