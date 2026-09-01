@@ -65,8 +65,8 @@ To instantiate it, you need to pass your Sonetel username and password to it. It
 import os
 import sonetel as sntl
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 s = sntl.Auth(username=user, password=pswd)
 
@@ -83,8 +83,8 @@ This automatically updates the Account object to use the newly generated access 
 import os
 import sonetel as sntl
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 s = sntl.Auth(username=user, password=pswd)
 
@@ -104,8 +104,8 @@ Get the decoded JWT token.
 import os
 import sonetel as sntl
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 s = sntl.Auth(username=user, password=pswd)
 
@@ -131,8 +131,8 @@ import os
 from sonetel import Auth
 from sonetel import Account
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 s = Auth(username=user,password=pswd)
 
@@ -157,8 +157,8 @@ If you set `num1` as your Sonetel email address, then the call will be handled a
 import os
 import sonetel
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 s = sonetel.Auth(username=user,password=pswd)
 
@@ -188,8 +188,8 @@ It supports the following methods:
 import os
 import sonetel
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 s = sonetel.Auth(username=user,password=pswd)
 
@@ -204,14 +204,14 @@ Please keep your Sonetel login credentials safe to avoid any misuse of your acco
 
 You can add them to your operating system's environment variables and use Python's `os` module to fetch them.
 
-Assuming the username and password are stored in environment variables named `sonetelUsername` and `sonetelPassword` respectively, here's how you can access them from a script:
+Assuming the username and password are stored in environment variables named `SonetelUsername` and `SonetelPassword` respectively, here's how you can access them from a script:
 
 ```python
 import os
 import sonetel
 
-user = os.environ.get('sonetelUsername')
-pswd = os.environ.get('sonetelPassword')
+user = os.environ.get('SonetelUsername')
+pswd = os.environ.get('SonetelPassword')
 
 s = sonetel.Auth(username=user,password=pswd)
 
