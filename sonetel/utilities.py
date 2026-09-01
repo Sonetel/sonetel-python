@@ -4,6 +4,7 @@ Utilities for internal use
 
 import datetime
 import logging
+import threading
 from time import time
 
 import jwt
@@ -18,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 # Global session manager instance
 _session_manager = None
+_session_manager_lock = threading.Lock()
 
 
 def get_session(**kwargs) -> SessionManager:
@@ -31,8 +33,12 @@ def get_session(**kwargs) -> SessionManager:
         The global SessionManager instance
     """
     global _session_manager
-    if _session_manager is None or kwargs:
-        _session_manager = SessionManager(**kwargs)
+    with _session_manager_lock:
+        if _session_manager is None or kwargs:
+            old_session = _session_manager
+            _session_manager = SessionManager(**kwargs)
+            if old_session is not None:
+                old_session.close()
     return _session_manager
 
 

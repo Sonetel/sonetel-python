@@ -12,6 +12,7 @@ setup(
     install_requires=[
         "requests>=2.25.0",
         "PyJWT>=2.0.0",
+        "urllib3>=1.26",
     ],
     python_requires=">=3.6",
     classifiers=[

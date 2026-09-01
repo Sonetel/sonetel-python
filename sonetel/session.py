@@ -11,7 +11,6 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from . import _constants as const
-from . import exceptions as e
 
 
 class SessionManager:
