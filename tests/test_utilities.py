@@ -91,7 +91,9 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         pass
 
 
-def test_send_api_request_non_200_status_returns_none():
+def test_send_api_request_non_200_status():
+    # SessionManager.request() only parses JSON for exactly HTTP 200;
+    # other 2xx statuses come back as {"status": "unknown", ...}.
     server = http.server.HTTPServer(("127.0.0.1", 0), _Handler)
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
@@ -99,7 +101,7 @@ def test_send_api_request_non_200_status_returns_none():
         response = send_api_request(
             token="x", uri=f"http://127.0.0.1:{server.server_port}/"
         )
-        assert response is None
+        assert response["status"] == "unknown"
     finally:
         server.shutdown()
         server.server_close()

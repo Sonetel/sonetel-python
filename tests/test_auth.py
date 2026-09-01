@@ -111,23 +111,23 @@ def test_create_token_http_error():
         ):
             response = auth.create_token(grant_type="password")
         assert response["status"] == "failed"
-        assert (
-            response["error"] == "Timeout"
-        )  # mislabeled in auth.py's HTTPError branch
+        assert response["error"] == "HTTPError"
     finally:
         server.shutdown()
         server.server_close()
 
 
 def test_create_token_unexpected_status():
+    # SessionManager.request() only parses JSON for exactly HTTP 200;
+    # other 2xx statuses come back as {"status": "unknown", ...}.
     server = _run_server(status=201)
     try:
         with patch(
             "sonetel._constants.API_URI_AUTH", f"http://127.0.0.1:{server.server_port}/"
         ):
             response = auth.create_token(grant_type="password")
-        assert response["status"] == "failed"
-        assert response["error"] == "Unknown error"
+        assert response["status"] == "unknown"
+        assert "response" in response
     finally:
         server.shutdown()
         server.server_close()

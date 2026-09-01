@@ -3,6 +3,8 @@ Utilities for internal use
 """
 
 import datetime
+import logging
+import threading
 from time import time
 
 import jwt
@@ -10,6 +12,34 @@ import requests
 
 from . import _constants as const
 from . import exceptions as e
+from .session import SessionManager
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Global session manager instance
+_session_manager = None
+_session_manager_lock = threading.Lock()
+
+
+def get_session(**kwargs) -> SessionManager:
+    """
+    Get or create the global session manager instance.
+
+    Args:
+        **kwargs: Optional configuration parameters for SessionManager
+
+    Returns:
+        The global SessionManager instance
+    """
+    global _session_manager
+    with _session_manager_lock:
+        if _session_manager is None or kwargs:
+            old_session = _session_manager
+            _session_manager = SessionManager(**kwargs)
+            if old_session is not None:
+                old_session.close()
+    return _session_manager
 
 
 class Resource:
@@ -75,18 +105,21 @@ def send_api_request(
     token: str,
     uri: str,
     method: str = "GET",
-    body: str = None,
+    body: str = "",
     body_type: str = const.CONTENT_TYPE_GENERAL,
 ) -> dict:
     """
-    Send an API request to Sonetel.
+    Send an API request to Sonetel using the session manager.
 
-    :param token: Required. String. The access token.
-    :param uri: Required. String. The API endpoint to send the request to.
-    :param method: Optional. String. The HTTP method to use. Defaults to GET.
-    :param body: Optional. String. The body of the request. Defaults to None.
-    :param body_type: Optional. String. The content type of the body. Defaults to application/json.
-    :return: A dictionary containing the response.
+    Args:
+        token: Required. String. The access token.
+        uri: Required. String. The API endpoint to send the request to.
+        method: Optional. String. The HTTP method to use. Defaults to GET.
+        body: Optional. String. The body of the request. Defaults to an empty string.
+        body_type: Optional. String. The content type of the body. Defaults to application/json.
+
+    Returns:
+        A dictionary containing the response.
     """
 
     # Checks
@@ -95,31 +128,11 @@ def send_api_request(
     if not uri:
         raise e.SonetelException('"uri" is a required parameter')
 
-    # Prepare the request Header
-    request_header = {
-        "Authorization": "Bearer " + token,
-        "Content-Type": body_type,
-        "User-Agent": f"Sonetel Python Package - v{const.PKG_VERSION}",
-    }
-
-    # Send the request
-    try:
-        r = requests.request(
-            method=method, url=uri, headers=request_header, data=body, timeout=60
-        )
-        r.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        return {"status": "failed", "error": "HTTPError", "message": err.response.text}
-    except requests.exceptions.ConnectionError as err:
-        return {"status": "failed", "error": "ConnectionError", "message": err}
-    except requests.exceptions.RequestException as err:
-        return {"status": "failed", "error": "RequestException", "message": err}
-
-    # pylint: disable=no-member
-    if r.status_code == requests.codes.ok:
-        return r.json()
-
-    r.raise_for_status()
+    # Get the session manager and send the request
+    session = get_session()
+    return session.request(
+        method=method, url=uri, token=token, body=body, content_type=body_type
+    )
 
 
 def prepare_error(code: int, message: str) -> dict:
