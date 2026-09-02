@@ -66,3 +66,24 @@ def test_phonenumber_update_invalid_connect_to_type():
         number="+12125551234", connect_to_type="bogus", connect_to="x"
     )
     assert response["status"] == "failed"
+
+
+def test_phonenumber_country():
+    response = phone_number.country(country="GBR")
+    assert response["status"] == "success"
+    assert response["response"]["name"] == "United Kingdom"
+    assert response["response"]["phonenumbers"]
+
+
+def test_phonenumber_stock_summary():
+    # Boston (857) is known to carry select-order stock.
+    response = phone_number.stock_summary("USA", area_code="857")
+    assert response["status"] == "success"
+    assert isinstance(response["response"], list)
+
+
+def test_phonenumber_available_numbers():
+    response = phone_number.available_numbers("USA", area_code="857")
+    assert response["status"] == "success"
+    assert response["response"]
+    assert "phnum" in response["response"][0]

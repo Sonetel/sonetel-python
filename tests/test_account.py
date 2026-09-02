@@ -41,3 +41,9 @@ def test_account_get_balance_with_currency():
 def test_account_update_empty_body():
     response = account.update()
     assert response["status"] == "failed"
+
+
+def test_account_get_with_fields():
+    response = account.get(fields="usage")
+    assert response["status"] == "success"
+    assert "usage" in response["response"]
